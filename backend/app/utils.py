@@ -1,33 +1,55 @@
 from pathlib import Path
-from fastapi import UploadFile, HTTPException
-from config import RASTER_EXT, VECTOR_EXT, MAX_FILE_SIZE_MB
+import uuid, shutil
+
+# Allowed single-file formats + shapefile parts
+ALLOWED = (".tif", ".tiff", ".geojson", ".shp", ".shx", ".dbf", ".prj")
 
 
-def save_upload(upload: UploadFile, out_path: Path):
-    with open(out_path, "wb") as f:
-        while True:
-            chunk = upload.file.read(1024 * 1024)
-            if not chunk:
-                break
-            f.write(chunk)
+# --------------------------------------------------
+# Validation
+# --------------------------------------------------
+
+def validate_file(file):
+    if not file.filename.lower().endswith(ALLOWED):
+        raise ValueError(f"Unsupported file type: {file.filename}")
 
 
-def validate_file(file: UploadFile):
+# --------------------------------------------------
+# Raster check
+# --------------------------------------------------
 
-    suffix = Path(file.filename).suffix.lower()
-
-    if suffix not in RASTER_EXT + VECTOR_EXT:
-        raise HTTPException(
-            status_code=400,
-            detail="Unsupported file type. Upload GeoTIFF, SHP, GeoJSON or GPKG."
-        )
-
-    return suffix
+def is_raster(path: Path):
+    return path.suffix.lower() in (".tif", ".tiff")
 
 
-def is_raster(path: Path) -> bool:
-    return path.suffix.lower() in RASTER_EXT
+# --------------------------------------------------
+# Multi-file input handler (KEY FIX)
+# --------------------------------------------------
 
+def prepare_multi_input(files, upload_dir: Path):
 
-def is_vector(path: Path) -> bool:
-    return path.suffix.lower() in VECTOR_EXT
+    uid = uuid.uuid4().hex
+    work_dir = upload_dir / uid
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    saved = []
+
+    # Save all uploaded files into one folder
+    for f in files:
+        out = work_dir / f.filename
+        with open(out, "wb") as buf:
+            shutil.copyfileobj(f.file, buf)
+        saved.append(out)
+
+    # Case 1: Single file (GeoTIFF / GeoJSON)
+    if len(saved) == 1:
+        return saved[0]
+
+    # Case 2: Multiple files → assume shapefile set
+    shp_files = list(work_dir.glob("*.shp"))
+
+    if not shp_files:
+        raise ValueError("No .shp file found. Upload all shapefile parts together.")
+
+    # Return the .shp path (GeoPandas will read .shx/.dbf/.prj automatically)
+    return shp_files[0]

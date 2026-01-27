@@ -19,12 +19,22 @@ def detect_crs(file_path: Path) -> str:
 
 def reproject_vector(src: Path, dst: Path, target_crs: str):
     gdf = gpd.read_file(src)
+
+    if gdf.crs is None:
+        raise ValueError("Vector has no CRS defined")
+
     gdf = gdf.to_crs(target_crs)
-    gdf.to_file(dst)
+
+    # Always write GeoJSON (web-safe)
+    gdf.to_file(dst, driver="GeoJSON")
 
 
 def reproject_raster(src: Path, dst: Path, target_crs: str):
     with rasterio.open(src) as src_ds:
+
+        if src_ds.crs is None:
+            raise ValueError("Raster has no CRS defined")
+
         transform, width, height = calculate_default_transform(
             src_ds.crs, target_crs,
             src_ds.width, src_ds.height,
