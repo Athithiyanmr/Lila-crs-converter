@@ -1,16 +1,16 @@
-version: "3.9"
-
 services:
-  backend:
-    build: ./backend
-    container_name: geocrs-api
+  geocrs-api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     ports:
       - "8000:8000"
+    depends_on:
+      - geocrs-ui
 
-  frontend:
-    build: ./frontend
-    container_name: geocrs-ui
+  geocrs-ui:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
     ports:
       - "8501:8501"
-    depends_on:
-      - backend

@@ -2,23 +2,18 @@ FROM condaforge/mambaforge:24.1.2-0
 
 WORKDIR /app
 
-# Install geospatial stack safely from conda-forge
+# install dependencies
 RUN mamba install -y -c conda-forge \
     python=3.10 \
     fastapi \
     uvicorn \
     rasterio \
     geopandas \
-    shapely \
-    fiona \
-    pyproj \
-    numpy \
-    requests \
-    python-multipart \
-    matplotlib \
-    pillow \
- && mamba clean -a -y
+    shapely
 
-COPY app/ /app
+# copy full backend package
+COPY backend /app/backend
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+EXPOSE 8000
+
+CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
