@@ -9,8 +9,8 @@ services:
 
   geocrs-ui:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile   # root Dockerfile
     container_name: geocrs-ui
     ports:
       - "8501:8501"
