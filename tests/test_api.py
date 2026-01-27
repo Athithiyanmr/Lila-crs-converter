@@ -5,15 +5,26 @@ from unittest.mock import MagicMock
 # =================================
 # MOCK HEAVY GIS DEPENDENCIES
 # =================================
-sys.modules["geopandas"] = MagicMock()
-sys.modules["rasterio"] = MagicMock()
-sys.modules["fiona"] = MagicMock()
-sys.modules["pyproj"] = MagicMock()
-sys.modules["shapely"] = MagicMock()
+
+mock = MagicMock()
+
+# rasterio and submodules
+sys.modules["rasterio"] = mock
+sys.modules["rasterio.warp"] = mock
+sys.modules["rasterio.enums"] = mock
+sys.modules["rasterio.crs"] = mock
+
+# geopandas and stack
+sys.modules["geopandas"] = mock
+sys.modules["fiona"] = mock
+sys.modules["pyproj"] = mock
+sys.modules["shapely"] = mock
+sys.modules["shapely.geometry"] = mock
 
 # =================================
 # Add project root to PYTHONPATH
 # =================================
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT))
 
