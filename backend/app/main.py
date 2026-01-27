@@ -3,9 +3,9 @@ from fastapi.responses import FileResponse
 from typing import List
 import uuid
 
-from config import APP_NAME, VERSION, UPLOAD_DIR, OUTPUT_DIR
-from utils import validate_file, is_raster, prepare_multi_input
-from crs import detect_crs, reproject_raster, reproject_vector
+from .config import APP_NAME, VERSION, UPLOAD_DIR, OUTPUT_DIR
+from .utils import validate_file, is_raster, prepare_multi_input
+from .crs import detect_crs, reproject_raster, reproject_vector
 
 app = FastAPI(title=APP_NAME, version=VERSION)
 
