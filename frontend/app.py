@@ -5,12 +5,8 @@ import requests
 # CONFIG
 # =========================
 
-API = "http://backend:8000"
+API = "http://geocrs-api:8000"
 st.set_page_config(page_title="Lila CRS Converter", layout="centered")
-CMD ["streamlit", "run", "app.py",
-     "--server.port=8501",
-     "--server.address=0.0.0.0",
-     "--server.maxUploadSize=1024"]
 
 # =========================
 # UI

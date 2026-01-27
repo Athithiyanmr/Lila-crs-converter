@@ -2,7 +2,6 @@ FROM condaforge/mambaforge:24.1.2-0
 
 WORKDIR /app
 
-# install dependencies
 RUN mamba install -y -c conda-forge \
     python=3.10 \
     fastapi \
@@ -11,7 +10,6 @@ RUN mamba install -y -c conda-forge \
     geopandas \
     shapely
 
-# copy full backend package
 COPY backend /app/backend
 
 EXPOSE 8000
