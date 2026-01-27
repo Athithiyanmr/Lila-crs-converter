@@ -89,3 +89,6 @@ ChatGPT-5.2
 
 🔗 LinkedIn: https://www.linkedin.com/in/athithiyan-m-r-/
 💻 GitHub: https://github.com/Athithiyanmr
+
+## 📜 License
+MIT License © 2026 Athithiyan MR
