@@ -1,0 +1,97 @@
+# ===============================
+# OS FILES
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# NODE / REACT
+# ===============================
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===============================
+# ENV FILES (SECRETS)
+# ===============================
+.env
+.env.local
+.env.*.local
+
+# ===============================
+# PYTHON
+# ===============================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+
+# Virtual environments
+venv/
+env/
+.venv/
+conda-env/
+*.conda
+
+# ===============================
+# FASTAPI / BACKEND
+# ===============================
+backend/__pycache__/
+backend/*.log
+
+# ===============================
+# DOCKER
+# ===============================
+*.tar
+docker-data/
+
+# ===============================
+# IDE / EDITORS
+# ===============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===============================
+# GIS / DATA FILES (IMPORTANT)
+# ===============================
+data/
+uploads/
+outputs/
+*.tif
+*.tiff
+*.img
+*.jp2
+*.asc
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.gpkg
+*.geojson
+*.vrt
+*.nc
+*.hdf
+*.SAFE/
+
+# ===============================
+# LOGS / TEMP
+# ===============================
+logs/
+*.log
+*.tmp
+*.bak
+
+# ===============================
+# TEST OUTPUTS
+# ===============================
+coverage/
+htmlcov/
