@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(ROOT))
 
 from fastapi.testclient import TestClient
-from geo_crs_converter.main import app
+from backend.app.main import app
 
 client = TestClient(app)
 
