@@ -21,7 +21,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install geopandas
-          pip install fastapi httpx pytest
+          pip install fastapi httpx pytest python-multipart
 
       - name: Show project structure (debug)
         run: ls -R
