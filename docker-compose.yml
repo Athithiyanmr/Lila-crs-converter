@@ -3,14 +3,16 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    container_name: geocrs-api
     ports:
       - "8000:8000"
-    depends_on:
-      - geocrs-ui
 
   geocrs-ui:
     build:
-      context: .
-      dockerfile: frontend/Dockerfile
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: geocrs-ui
     ports:
       - "8501:8501"
+    depends_on:
+      - geocrs-api
