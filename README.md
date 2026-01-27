@@ -85,5 +85,7 @@ Once deployed, users will be able to access Lila CRS Converter directly from the
 Athithiyan MR
 Data Analyst | Geospatial & Remote Sensing Specialist | GeoAI & Climate Analytics
 
+ChatGPT-5.2 
+
 🔗 LinkedIn: https://www.linkedin.com/in/athithiyan-m-r-/
 💻 GitHub: https://github.com/Athithiyanmr
