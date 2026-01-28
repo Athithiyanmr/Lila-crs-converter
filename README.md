@@ -15,7 +15,7 @@ It is built for GIS analysts, remote sensing engineers, and geospatial developer
 ## 🎥 Demo Video
 
 👉 Watch the full demo here:  
-https://github.com/Athithiyanmr/geo-crs-converter/videos/demo.mp4
+https://github.com/Athithiyanmr/geo-crs-converter/videos/demo.mov
 
 
 
