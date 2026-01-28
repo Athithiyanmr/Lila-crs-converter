@@ -4,6 +4,13 @@ Lila CRS Converter is a containerized geospatial web platform for detecting and 
 
 It is built for GIS analysts, remote sensing engineers, and geospatial developers who need a fast, reliable way to inspect and reproject spatial data directly in the browser—without relying on heavy desktop GIS software.
 
+
+## 📸 Preview
+
+<p align="center">
+  <img src="screenshots/ui.png" width="900"/>
+</p>
+
 ⸻
 
 ✨ What you can do
