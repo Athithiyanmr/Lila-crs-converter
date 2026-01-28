@@ -30,10 +30,15 @@ async def detect(files: List[UploadFile] = File(...)):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+# =====================================================
+# UPDATED CONVERT ENDPOINT
+# =====================================================
+
 @app.post("/convert")
 async def convert(
     files: List[UploadFile] = File(...),
-    target_crs: str = Form(...)
+    target_crs: str = Form(...),
+    output_format: str = Form("geojson")   # 👈 NEW
 ):
     try:
         for f in files:
@@ -43,13 +48,18 @@ async def convert(
         in_path = prepare_multi_input(files, UPLOAD_DIR)
 
         if is_raster(in_path):
-            out_path = OUTPUT_DIR / f"reprojected_{uid}.tif"
-            reproject_raster(in_path, out_path, target_crs)
-        else:
-            out_path = OUTPUT_DIR / f"reprojected_{uid}.geojson"
-            reproject_vector(in_path, out_path, target_crs)
+            out_file = OUTPUT_DIR / f"reprojected_{uid}.tif"
+            reproject_raster(in_path, out_file, target_crs)
 
-        return FileResponse(out_path, filename=out_path.name)
+        else:
+            out_file = reproject_vector(
+                in_path,
+                OUTPUT_DIR / f"reprojected_{uid}",
+                target_crs,
+                output_format
+            )
+
+        return FileResponse(out_file, filename=out_file.name)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
