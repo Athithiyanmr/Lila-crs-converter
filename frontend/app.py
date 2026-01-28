@@ -60,7 +60,7 @@ if files and len(files) > 0:
             except Exception as e:
                 st.error(f"Server error: {e}")
 
-    # -------- CRS selection --------
+    # -------- CRS & OUTPUT FORMAT --------
     with col2:
         target = st.selectbox(
             "Select target CRS",
@@ -73,7 +73,23 @@ if files and len(files) > 0:
             ]
         )
 
+        output_format_ui = st.selectbox(
+            "Select output format (for vector data)",
+            [
+                "GeoJSON (.geojson)",
+                "GeoPackage (.gpkg)",
+                "Shapefile (.zip)"
+            ]
+        )
+
     target_crs = target.split()[0]
+
+    if "GeoJSON" in output_format_ui:
+        out_fmt = "geojson"
+    elif "GeoPackage" in output_format_ui:
+        out_fmt = "gpkg"
+    else:
+        out_fmt = "shapefile"
 
     # -------- Convert CRS --------
     if st.button("♻️ Convert CRS"):
@@ -85,17 +101,26 @@ if files and len(files) > 0:
                 res = requests.post(
                     f"{API}/convert",
                     files=multipart_files,
-                    data={"target_crs": target_crs},
+                    data={
+                        "target_crs": target_crs,
+                        "output_format": out_fmt
+                    },
                     timeout=1800
                 )
 
             if res.status_code == 200:
                 st.success("✅ Conversion successful!")
 
+                # Output filename
                 if any(f.name.lower().endswith((".tif", ".tiff")) for f in files):
                     out_name = "reprojected.tif"
                 else:
-                    out_name = "reprojected.geojson"
+                    if out_fmt == "geojson":
+                        out_name = "reprojected.geojson"
+                    elif out_fmt == "gpkg":
+                        out_name = "reprojected.gpkg"
+                    else:
+                        out_name = "reprojected.zip"
 
                 st.download_button(
                     "⬇ Download converted file",
