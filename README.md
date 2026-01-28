@@ -72,26 +72,26 @@ Open in your browser:
 	👉 http://localhost:8501
 ☁️ Deployment
 
-	Lila CRS Converter is designed for cloud deployment using Docker.
-	
-	🚧 Hetzner Cloud deployment is in progress.
-	A public demo link will be added here soon.
-	
-	Once deployed, users will be able to access the platform directly through the browser without any local setup.
+Lila CRS Converter is designed for cloud deployment using Docker.
+
+🚧 Hetzner Cloud deployment is in progress.
+A public demo link will be added here soon.
+
+Once deployed, users will be able to access the platform directly through the browser without any local setup.
 
 ⸻
 
 👤 Author
 
-	Athithiyan MR
-	Data Analyst | Geospatial & Remote Sensing Specialist
-	GeoAI • Climate Analytics • Spatial Systems
+Athithiyan MR
+Data Analyst | Geospatial & Remote Sensing Specialist
+GeoAI • Climate Analytics • Spatial Systems
 	
-	🔗 LinkedIn: https://www.linkedin.com/in/athithiyan-m-r-/
-	💻 GitHub: https://github.com/Athithiyanmr
+🔗 LinkedIn: https://www.linkedin.com/in/athithiyan-m-r-/
+💻 GitHub: https://github.com/Athithiyanmr
 
 ⸻
 
 📜 License
 
-	MIT License © 2026 Athithiyan MR
+MIT License © 2026 Athithiyan MR
