@@ -54,11 +54,11 @@ Supported formats
 
 
 ⚙️ How it works
-	1.	The Streamlit frontend manages file uploads and user interaction
-	2.	The FastAPI backend handles CRS detection and reprojection
-	3.	Raster data is returned as a reprojected GeoTIFF
-	4.	Vector data is exported as GeoJSON, GeoPackage, or Shapefile (ZIP)
-	5.	All services run in isolated Docker containers for reproducibility and scalability
+		1.	The Streamlit frontend manages file uploads and user interaction 
+		2.	The FastAPI backend handles CRS detection and reprojection
+		3.	Raster data is returned as a reprojected GeoTIFF
+		4.	Vector data is exported as GeoJSON, GeoPackage, or Shapefile (ZIP)
+		5.	All services run in isolated Docker containers for reproducibility and scalability
 
 
 🐳 Run locally (Docker)
