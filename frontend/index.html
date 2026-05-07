@@ -3,698 +3,438 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lila CRS Converter — Reproject Spatial Data</title>
-  <meta name="description" content="Upload GeoTIFF, GeoJSON, or Shapefiles and convert to any coordinate reference system instantly."/>
+  <title>Lila CRS Converter</title>
+  <meta name="description" content="Reproject GeoTIFF, GeoJSON and Shapefiles to any coordinate reference system instantly."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
     :root,[data-theme="light"]{
-      --bg:#f7f6f2;--surface:#faf9f6;--surface-2:#ffffff;--surface-offset:#f0ede8;
-      --divider:#e5e0d8;--border:#dbd5cc;
-      --text:#1c1a16;--text-muted:#6d6560;--text-faint:#aaa49d;--text-inverse:#ffffff;
-      --primary:#01696f;--primary-hover:#0c4e54;--primary-active:#0f3638;--primary-hl:#d2dedd;
-      --success:#437a22;--error:#a12c2c;
-      --orange:#c95a1f;--orange-hl:rgba(201,90,31,.08);
-      --font-body:'Inter',system-ui,sans-serif;
-      --font-mono:'JetBrains Mono','Courier New',monospace;
-      --ease:cubic-bezier(.16,1,.3,1);--t:180ms;
-      --r-sm:4px;--r-md:8px;--r-lg:12px;
-      --shadow-sm:0 1px 3px rgba(28,26,22,.06),0 1px 2px rgba(28,26,22,.04);
-      --shadow-md:0 4px 12px rgba(28,26,22,.08);
-      --shadow-lg:0 12px 32px rgba(28,26,22,.12);
+      --bg:#f8f7f3;
+      --surface:#ffffff;
+      --surface-2:#fdfcfa;
+      --surface-off:#f1ede6;
+      --divider:#e8e2d8;
+      --border:#ddd7cc;
+      --text:#1a1714;
+      --muted:#6b6259;
+      --faint:#b3ab9f;
+      --primary:#1a6b5a;
+      --primary-h:#155749;
+      --primary-a:#0f3d34;
+      --primary-hl:rgba(26,107,90,.08);
+      --primary-hl2:rgba(26,107,90,.14);
+      --success:#3a7c22;
+      --error:#a02828;
+      --warn-bg:rgba(180,110,20,.07);
+      --warn:rgba(180,110,20,.9);
+      --warn-b:rgba(180,110,20,.2);
+      --mono:'JetBrains Mono',monospace;
+      --body:'Inter',system-ui,sans-serif;
+      --serif:'Instrument Serif',Georgia,serif;
+      --ease:cubic-bezier(.16,1,.3,1);
+      --t:170ms;
+      --rsm:5px;--rmd:9px;--rlg:14px;--rxl:20px;
+      --sh-sm:0 1px 3px rgba(26,23,20,.05),0 1px 2px rgba(26,23,20,.04);
+      --sh-md:0 4px 14px rgba(26,23,20,.08);
+      --sh-lg:0 12px 36px rgba(26,23,20,.12);
     }
     [data-theme="dark"]{
-      --bg:#131211;--surface:#1a1917;--surface-2:#1f1e1b;--surface-offset:#242220;
-      --divider:#2a2825;--border:#363330;
-      --text:#d0cec9;--text-muted:#7a7570;--text-faint:#524f4b;--text-inverse:#131211;
-      --primary:#4f9ea8;--primary-hover:#3c8a94;--primary-active:#2d707a;--primary-hl:#233538;
-      --success:#6daa45;--error:#d06060;
-      --orange:#e07b44;--orange-hl:rgba(224,123,68,.1);
-      --shadow-sm:0 1px 3px rgba(0,0,0,.22);
-      --shadow-md:0 4px 12px rgba(0,0,0,.32);
-      --shadow-lg:0 12px 32px rgba(0,0,0,.44);
+      --bg:#141210;
+      --surface:#1c1a17;
+      --surface-2:#201e1b;
+      --surface-off:#252220;
+      --divider:#2e2b28;
+      --border:#383430;
+      --text:#d4d0cb;
+      --muted:#7a7570;
+      --faint:#4e4b47;
+      --primary:#4da88c;
+      --primary-h:#3d9278;
+      --primary-a:#2d7560;
+      --primary-hl:rgba(77,168,140,.1);
+      --primary-hl2:rgba(77,168,140,.18);
+      --success:#6daa45;--error:#cc5555;
+      --warn-bg:rgba(210,140,50,.09);
+      --warn:rgba(210,150,60,.9);
+      --warn-b:rgba(210,140,50,.2);
+      --sh-sm:0 1px 3px rgba(0,0,0,.22);
+      --sh-md:0 4px 14px rgba(0,0,0,.32);
+      --sh-lg:0 12px 36px rgba(0,0,0,.45);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;}
-    body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:1rem;line-height:1.6;min-height:100dvh;}
+    body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:1rem;line-height:1.65;min-height:100dvh;}
     img,svg{display:block;max-width:100%;}
-    input,button,select{font:inherit;color:inherit;}
+    input,button,select,textarea{font:inherit;color:inherit;}
     button{cursor:pointer;background:none;border:none;}
-    ::selection{background:var(--primary-hl);color:var(--text);}
-    :focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:var(--r-sm);}
+    ::selection{background:var(--primary-hl2);color:var(--text);}
+    :focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:var(--rsm);}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;}}
     a,button,[role="button"],input,select{transition:color var(--t) var(--ease),background var(--t) var(--ease),border-color var(--t) var(--ease),box-shadow var(--t) var(--ease);}
-
-    /* NAV */
-    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,4vw,2rem);height:54px;background:color-mix(in oklab,var(--surface) 95%,transparent);border-bottom:1px solid var(--divider);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
-    .nav-left{display:flex;align-items:center;gap:12px;}
-    .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--text);}
-    .nav-brand{font-size:.9rem;font-weight:700;letter-spacing:-.01em;}
-    .nav-brand span{color:var(--primary);}
-    .nav-pill{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);background:var(--primary-hl);border:1px solid color-mix(in oklab,var(--primary) 25%,transparent);padding:3px 10px;border-radius:999px;}
-    .nav-actions{display:flex;align-items:center;gap:8px;}
-    .nav-link{font-size:.78rem;font-weight:600;color:var(--text-muted);text-decoration:none;padding:5px 10px;border-radius:var(--r-sm);}
-    .nav-link:hover{color:var(--text);background:var(--surface-offset);}
-    .theme-toggle{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);color:var(--text-muted);border:1px solid var(--border);}
-    .theme-toggle:hover{color:var(--text);background:var(--surface-offset);}
-
-    /* HERO */
-    .hero{padding:clamp(2.5rem,6vw,4.5rem) clamp(1rem,4vw,2rem) clamp(2rem,4vw,3.5rem);border-bottom:1px solid var(--divider);background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface) 50%,var(--surface-offset) 100%);position:relative;overflow:hidden;}
-    .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,color-mix(in oklab,var(--primary) 6%,transparent) 0%,transparent 70%);pointer-events:none;}
-    .hero-inner{max-width:520px;position:relative;}
-    .hero-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);margin-bottom:14px;}
-    .hero-eyebrow::before{content:'';width:16px;height:2px;background:var(--primary);border-radius:1px;}
-    .hero h1{font-size:clamp(1.75rem,4vw,2.8rem);font-weight:700;line-height:1.1;letter-spacing:-.025em;margin-bottom:14px;}
-    .hero h1 em{font-style:normal;color:var(--primary);}
-    .hero p{font-size:.9rem;color:var(--text-muted);max-width:46ch;line-height:1.75;}
-    .hero-formats{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
-    .fmt-chip{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);background:var(--surface-offset);border:1px solid var(--border);padding:4px 10px;border-radius:999px;}
-    .fmt-chip.active{color:var(--primary);background:var(--primary-hl);border-color:color-mix(in oklab,var(--primary) 22%,transparent);}
-
-    /* WRAP & STEPS */
-    .wrap{max-width:820px;margin:0 auto;padding:clamp(1.5rem,4vw,3rem) clamp(1rem,4vw,2rem);}
-    .step-row{display:flex;align-items:center;gap:12px;margin-bottom:18px;margin-top:8px;}
-    .step-badge{display:flex;align-items:center;gap:6px;font-size:.58rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--primary);white-space:nowrap;}
-    .step-num-circle{width:18px;height:18px;border-radius:50%;background:var(--primary-hl);border:1px solid color-mix(in oklab,var(--primary) 25%,transparent);display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:800;color:var(--primary);}
-    .step-line{flex:1;height:1px;background:var(--divider);}
-
-    /* PANEL */
-    .panel{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:clamp(1.25rem,3vw,1.75rem);margin-bottom:12px;box-shadow:var(--shadow-sm);}
-    .panel-head{display:flex;align-items:center;gap:8px;font-size:.9rem;font-weight:700;color:var(--text);margin-bottom:4px;}
-    .ph-icon{width:28px;height:28px;border-radius:var(--r-sm);background:var(--primary-hl);display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0;}
-    .panel-sub{font-size:.8rem;color:var(--text-muted);margin-bottom:16px;line-height:1.75;max-width:60ch;}
-    hr.rule{border:none;border-top:1px solid var(--divider);margin:16px 0;}
-
-    /* DROP ZONE */
-    .drop-zone{position:relative;border:1.5px dashed var(--border);border-radius:var(--r-md);padding:32px 20px;text-align:center;cursor:pointer;background:var(--bg);transition:border-color var(--t) var(--ease),background var(--t) var(--ease);}
-    .drop-zone:hover,.drop-zone.drag-over{border-color:var(--primary);background:var(--primary-hl);}
-    .drop-zone input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-    .drop-icon{width:44px;height:44px;border-radius:50%;background:var(--primary-hl);border:1px solid color-mix(in oklab,var(--primary) 18%,transparent);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--primary);}
-    .drop-title{font-size:.9rem;font-weight:700;margin-bottom:4px;}
-    .drop-sub{font-size:.72rem;color:var(--text-muted);}
-    .drop-accepted{font-size:.62rem;color:var(--text-faint);margin-top:6px;font-family:var(--font-mono);}
-
-    /* FILE LIST */
-    .file-list{display:flex;flex-direction:column;gap:5px;margin-top:12px;}
-    .file-item{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);font-size:.78rem;animation:fi-in .18s var(--ease) both;}
-    @keyframes fi-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-    .file-ext{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;background:var(--primary-hl);color:var(--primary);border-radius:var(--r-sm);flex-shrink:0;}
-    .file-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
-    .file-size{color:var(--text-muted);font-size:.68rem;flex-shrink:0;font-family:var(--font-mono);}
-    .file-remove{color:var(--text-faint);padding:3px;border-radius:3px;}
-    .file-remove:hover{color:var(--error);}
-
-    /* ALERTS */
-    .alert{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;border-radius:var(--r-md);font-size:.78rem;border:1px solid;margin-bottom:14px;line-height:1.65;}
-    .alert svg{flex-shrink:0;margin-top:1px;}
-    .a-info{background:color-mix(in oklab,var(--primary) 6%,transparent);color:var(--primary);border-color:color-mix(in oklab,var(--primary) 20%,transparent);}
-    .a-warn{background:var(--orange-hl);color:var(--orange);border-color:color-mix(in oklab,var(--orange) 22%,transparent);}
-
-    /* METADATA CARDS */
-    .meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:12px;}
-    .meta-card{background:var(--surface-offset);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 12px;}
-    .meta-label{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:3px;}
-    .meta-value{font-size:.78rem;font-weight:600;color:var(--text);font-family:var(--font-mono);word-break:break-all;}
-    .meta-value.crs-tag{color:var(--primary);}
-
-    /* EPSG SEARCH */
-    .epsg-search-wrap{position:relative;}
-    .epsg-results{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:200;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);box-shadow:var(--shadow-lg);max-height:220px;overflow-y:auto;display:none;}
-    .epsg-results.open{display:block;}
-    .epsg-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--divider);transition:background var(--t);}
-    .epsg-item:last-child{border-bottom:none;}
-    .epsg-item:hover,.epsg-item.active{background:var(--primary-hl);}
-    .epsg-code{font-size:.72rem;font-weight:700;color:var(--primary);font-family:var(--font-mono);}
-    .epsg-name{font-size:.76rem;color:var(--text-muted);margin-top:1px;}
-    .epsg-area{font-size:.65rem;color:var(--text-faint);}
-    .epsg-spinner{position:absolute;right:10px;top:50%;transform:translateY(-50%);display:none;}
-    .epsg-spinner.on{display:block;}
-
-    /* CRS DETECTED */
-    .crs-detected{display:none;margin-top:12px;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--r-md);background:color-mix(in oklab,var(--primary) 7%,transparent);border:1px solid color-mix(in oklab,var(--primary) 22%,transparent);font-size:.78rem;color:var(--text-muted);animation:badge-in .22s var(--ease) both;}
-    @keyframes badge-in{from{opacity:0;transform:scale(.98) translateY(4px)}to{opacity:1;transform:none}}
-    .crs-detected.on{display:flex;}
-    .crs-val{font-family:var(--font-mono);font-size:.82rem;font-weight:700;color:var(--primary);}
-
-    /* FORM */
-    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-    @media(max-width:520px){.form-grid{grid-template-columns:1fr;}}
+    nav{
+      position:sticky;top:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 clamp(1.25rem,4vw,2.5rem);height:56px;
+      background:color-mix(in oklab,var(--surface) 94%,transparent);
+      border-bottom:1px solid var(--divider);
+      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    }
+    .nav-left{display:flex;align-items:center;gap:14px;}
+    .nav-brand{font-family:var(--body);font-size:.95rem;font-weight:700;letter-spacing:-.02em;color:var(--text);text-decoration:none;}
+    .nav-brand em{font-style:normal;color:var(--primary);}
+    .nav-badge{font-size:.58rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--primary);background:var(--primary-hl);border:1px solid var(--primary-hl2);padding:3px 9px;border-radius:999px;}
+    .nav-right{display:flex;align-items:center;gap:6px;}
+    .nav-link{font-size:.76rem;font-weight:600;color:var(--muted);text-decoration:none;padding:5px 9px;border-radius:var(--rsm);}
+    .nav-link:hover{color:var(--text);background:var(--surface-off);}
+    .nav-icon-btn{width:33px;height:33px;display:flex;align-items:center;justify-content:center;color:var(--muted);border:1px solid var(--border);border-radius:var(--rmd);background:var(--surface);}
+    .nav-icon-btn:hover{color:var(--text);background:var(--surface-off);}
+    .hero{
+      padding:clamp(3rem,7vw,5rem) clamp(1.25rem,4vw,2.5rem) clamp(2rem,4vw,3.5rem);
+      border-bottom:1px solid var(--divider);
+      background:linear-gradient(145deg,var(--surface) 0%,var(--surface-2) 50%,var(--surface-off) 100%);
+      position:relative;overflow:hidden;
+    }
+    .hero::after{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(ellipse 55% 55% at 90% -10%,var(--primary-hl) 0%,transparent 70%);
+    }
+    .hero-content{position:relative;z-index:1;max-width:580px;}
+    .hero-tag{display:inline-flex;align-items:center;gap:7px;font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--primary);margin-bottom:16px;}
+    .hero-tag-line{width:20px;height:1.5px;background:var(--primary);border-radius:1px;flex-shrink:0;}
+    .hero h1{font-family:var(--serif);font-size:clamp(2rem,5vw,3.4rem);font-weight:400;line-height:1.08;letter-spacing:-.01em;color:var(--text);margin-bottom:16px;}
+    .hero h1 em{font-style:italic;color:var(--primary);}
+    .hero-desc{font-size:.9rem;color:var(--muted);max-width:45ch;line-height:1.8;}
+    .hero-chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:20px;}
+    .chip{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 11px;border-radius:999px;border:1px solid var(--border);color:var(--faint);background:transparent;}
+    .chip.on{color:var(--primary);background:var(--primary-hl);border-color:var(--primary-hl2);}
+    .page{max-width:860px;margin:0 auto;padding:clamp(2rem,4vw,3rem) clamp(1.25rem,4vw,2.5rem);}
+    .sh{display:flex;align-items:center;gap:10px;margin-bottom:14px;margin-top:4px;}
+    .sh-num{width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;font-size:.58rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .sh-num.done{background:var(--success);}
+    .sh-num.passive{background:var(--surface-off);color:var(--faint);border:1px solid var(--border);}
+    .sh-label{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--primary);white-space:nowrap;}
+    .sh-label.passive{color:var(--faint);}
+    .sh-line{flex:1;height:1px;background:var(--divider);}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);padding:clamp(1.25rem,3vw,1.75rem);margin-bottom:10px;box-shadow:var(--sh-sm);}
+    .card-title{display:flex;align-items:center;gap:9px;font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+    .card-icon{width:28px;height:28px;border-radius:var(--rsm);background:var(--primary-hl);color:var(--primary);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .card-desc{font-size:.78rem;color:var(--muted);line-height:1.75;margin-bottom:16px;max-width:58ch;}
+    hr.rule{border:none;border-top:1px solid var(--divider);margin:14px 0;}
+    .alert{display:flex;align-items:flex-start;gap:9px;padding:10px 13px;border-radius:var(--rmd);border:1px solid;font-size:.76rem;line-height:1.7;margin-bottom:14px;}
+    .alert svg{flex-shrink:0;margin-top:2px;}
+    .a-info{background:var(--primary-hl);color:var(--primary);border-color:var(--primary-hl2);}
+    .a-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-b);}
+    .dropzone{position:relative;border:1.5px dashed var(--border);border-radius:var(--rmd);padding:34px 20px;text-align:center;cursor:pointer;background:var(--surface-2);transition:border-color var(--t) var(--ease),background var(--t) var(--ease);}
+    .dropzone:hover,.dropzone.over{border-color:var(--primary);background:var(--primary-hl);}
+    .dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+    .dz-icon{width:46px;height:46px;border-radius:50%;background:var(--primary-hl);border:1px solid var(--primary-hl2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:var(--primary);}
+    .dz-title{font-size:.9rem;font-weight:700;margin-bottom:3px;}
+    .dz-sub{font-size:.72rem;color:var(--muted);}
+    .dz-formats{font-size:.6rem;color:var(--faint);margin-top:6px;font-family:var(--mono);}
+    .filelist{display:flex;flex-direction:column;gap:5px;margin-top:10px;}
+    @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .fitem{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rmd);font-size:.76rem;animation:fi .17s var(--ease) both;}
+    .fext{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;background:var(--primary-hl);color:var(--primary);border-radius:var(--rsm);flex-shrink:0;}
+    .fname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+    .fsize{color:var(--muted);font-size:.66rem;font-family:var(--mono);flex-shrink:0;}
+    .frem{color:var(--faint);padding:3px;border-radius:3px;}
+    .frem:hover{color:var(--error);}
+    .meta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:7px;margin-top:10px;}
+    .mcard{background:var(--surface-off);border:1px solid var(--divider);border-radius:var(--rmd);padding:9px 11px;}
+    .mcard-lbl{font-size:.56rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-bottom:2px;}
+    .mcard-val{font-size:.76rem;font-weight:600;color:var(--text);font-family:var(--mono);word-break:break-all;}
+    .mcard-val.crs{color:var(--primary);}
+    @keyframes badge{from{opacity:0;transform:translateY(4px) scale(.98)}to{opacity:1;transform:none}}
+    .crs-badge{display:none;align-items:center;gap:9px;padding:10px 14px;border-radius:var(--rmd);background:var(--primary-hl);border:1px solid var(--primary-hl2);font-size:.76rem;color:var(--muted);margin-top:10px;}
+    .crs-badge.on{display:flex;animation:badge .2s var(--ease) both;}
+    .crs-code{font-family:var(--mono);font-size:.8rem;font-weight:700;color:var(--primary);}
+    .search-wrap{position:relative;}
+    .search-results{position:absolute;top:calc(100% + 5px);left:0;right:0;z-index:300;background:var(--surface);border:1px solid var(--border);border-radius:var(--rmd);box-shadow:var(--sh-lg);max-height:230px;overflow-y:auto;display:none;scrollbar-width:thin;}
+    .search-results.open{display:block;}
+    .sr-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--divider);transition:background var(--t);}
+    .sr-item:last-child{border-bottom:none;}
+    .sr-item:hover,.sr-item.active{background:var(--primary-hl);}
+    .sr-code{font-size:.7rem;font-weight:700;color:var(--primary);font-family:var(--mono);}
+    .sr-name{font-size:.76rem;color:var(--muted);margin-top:1px;}
+    .sr-area{font-size:.63rem;color:var(--faint);}
+    .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    @media(max-width:520px){.fgrid{grid-template-columns:1fr;}}
     .fg{display:flex;flex-direction:column;gap:5px;}
-    .fl{font-size:.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);}
-    .fs,.fi{width:100%;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);font-size:.84rem;color:var(--text);appearance:none;}
-    .fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23aaa49d' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px;}
-    .fs:focus,.fi:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in oklab,var(--primary) 12%,transparent);}
-    .fh{font-size:.65rem;color:var(--text-faint);}
-    .fh a{color:var(--primary);text-decoration:none;}
-    .fh a:hover{text-decoration:underline;}
-
-    /* BUTTONS */
-    .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
-    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;font-size:.82rem;font-weight:600;letter-spacing:.01em;border-radius:var(--r-md);border:1px solid transparent;transition:all var(--t) var(--ease);white-space:nowrap;}
+    .fl{font-size:.58rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+    .fi,.fs{width:100%;padding:9px 12px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rmd);font-size:.84rem;color:var(--text);appearance:none;}
+    .fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23b3ab9f' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:32px;}
+    .fi:focus,.fs:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-hl);}
+    .fhint{font-size:.63rem;color:var(--faint);}
+    .fhint a{color:var(--primary);text-decoration:none;}
+    .fhint a:hover{text-decoration:underline;}
+    .brow{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;}
+    .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;font-size:.82rem;font-weight:600;border-radius:var(--rmd);border:1px solid transparent;white-space:nowrap;}
     .btn:active:not(:disabled){transform:translateY(1px);}
-    .btn:disabled{opacity:.38;cursor:not-allowed;transform:none!important;}
-    .btn-primary{background:var(--primary);color:var(--text-inverse);box-shadow:0 2px 6px color-mix(in oklab,var(--primary) 28%,transparent);}
-    .btn-primary:not(:disabled):hover{background:var(--primary-hover);box-shadow:0 4px 12px color-mix(in oklab,var(--primary) 38%,transparent);}
-    .btn-detect{background:var(--primary-hl);color:var(--primary);border-color:color-mix(in oklab,var(--primary) 22%,transparent);}
-    .btn-detect:not(:disabled):hover{background:color-mix(in oklab,var(--primary) 14%,transparent);}
-    .btn-ghost{background:transparent;color:var(--text-muted);border-color:var(--border);}
-    .btn-ghost:hover{border-color:var(--text-muted);color:var(--text);}
-    .btn-download{background:var(--primary-hl);color:var(--primary);border-color:color-mix(in oklab,var(--primary) 22%,transparent);}
-    .btn-download:hover{background:color-mix(in oklab,var(--primary) 14%,transparent);}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .btn-spinner{display:none;width:12px;height:12px;border:1.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite;flex-shrink:0;}
-    .loading .btn-spinner{display:inline-block;}
-    .loading .btn-icon{display:none;}
-
-    /* PROGRESS */
-    .progress-wrap{display:none;margin-top:14px;}
-    .progress-wrap.on{display:block;animation:fade-in .22s var(--ease) both;}
-    @keyframes fade-in{from{opacity:0}to{opacity:1}}
-    .progress-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-    .progress-text{font-size:.75rem;font-weight:600;color:var(--text-muted);}
-    .progress-track{height:3px;background:var(--surface-offset);border-radius:999px;overflow:hidden;}
-    @keyframes progress-anim{0%{transform:translateX(-100%)}100%{transform:translateX(600%)}}
-    .progress-bar{height:100%;width:18%;background:var(--primary);border-radius:999px;animation:progress-anim 1.5s ease-in-out infinite;}
-    .dl-wrap{display:none;margin-top:14px;}
-    .dl-wrap.on{display:flex;animation:fade-in .22s var(--ease) both;}
-
-    /* MAP PREVIEW */
-    .map-section{display:none;margin-top:14px;}
-    .map-section.on{display:block;animation:fade-in .3s var(--ease) both;}
-    .map-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-    .map-label::before{content:'';width:10px;height:2px;background:var(--primary);border-radius:1px;}
-    #map-container{height:280px;border-radius:var(--r-md);border:1px solid var(--border);overflow:hidden;background:var(--surface-offset);}
-
-    /* HISTORY TABLE */
-    .tbl-wrap{overflow-x:auto;border-radius:var(--r-md);border:1px solid var(--divider);}
-    table{width:100%;border-collapse:collapse;font-size:.78rem;}
-    thead{background:var(--surface-offset);}
-    th{text-align:left;font-size:.58rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text-faint);font-weight:700;padding:8px 12px;border-bottom:1px solid var(--divider);white-space:nowrap;}
-    td{padding:10px 12px;border-bottom:1px solid var(--divider);color:var(--text);vertical-align:middle;}
+    .btn:disabled{opacity:.35;cursor:not-allowed;transform:none!important;}
+    .btn-p{background:var(--primary);color:#fff;box-shadow:0 2px 8px color-mix(in oklab,var(--primary) 30%,transparent);}
+    .btn-p:not(:disabled):hover{background:var(--primary-h);box-shadow:0 4px 14px color-mix(in oklab,var(--primary) 40%,transparent);}
+    .btn-d{background:var(--primary-hl);color:var(--primary);border-color:var(--primary-hl2);}
+    .btn-d:not(:disabled):hover{background:var(--primary-hl2);}
+    .btn-g{background:transparent;color:var(--muted);border-color:var(--border);}
+    .btn-g:hover{color:var(--text);border-color:var(--muted);}
+    @keyframes sp{to{transform:rotate(360deg)}}
+    .bsp{display:none;width:12px;height:12px;border:1.5px solid currentColor;border-top-color:transparent;border-radius:50%;animation:sp .6s linear infinite;flex-shrink:0;}
+    .loading .bsp{display:inline-block;}
+    .loading .bi{display:none;}
+    .prog{display:none;margin-top:16px;}
+    .prog.on{display:block;}
+    .prog-lbl{font-size:.74rem;font-weight:600;color:var(--muted);margin-bottom:8px;}
+    .prog-track{height:2px;background:var(--surface-off);border-radius:999px;overflow:hidden;}
+    @keyframes pa{0%{transform:translateX(-100%)}100%{transform:translateX(700%)}}
+    .prog-fill{height:100%;width:15%;background:var(--primary);border-radius:999px;animation:pa 1.4s ease-in-out infinite;}
+    .dl-row{display:none;margin-top:14px;}
+    .dl-row.on{display:flex;}
+    .map-wrap{display:none;margin-top:14px;}
+    .map-wrap.on{display:block;}
+    .map-label{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+    #map{height:260px;border-radius:var(--rmd);border:1px solid var(--border);overflow:hidden;}
+    [data-theme="dark"] .leaflet-tile{filter:brightness(.65) invert(1) contrast(3) hue-rotate(200deg) saturate(.3) brightness(.7);}
+    [data-theme="dark"] .leaflet-container{background:var(--surface-off);}
+    .tbl-wrap{overflow-x:auto;border-radius:var(--rmd);border:1px solid var(--divider);}
+    table{width:100%;border-collapse:collapse;font-size:.76rem;}
+    thead{background:var(--surface-off);}
+    th{text-align:left;font-size:.56rem;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);font-weight:700;padding:8px 12px;border-bottom:1px solid var(--divider);white-space:nowrap;}
+    td{padding:10px 12px;border-bottom:1px solid var(--divider);vertical-align:middle;}
     tr:last-child td{border-bottom:none;}
-    tbody tr{transition:background var(--t) var(--ease);}
-    tbody tr:hover td{background:var(--surface-offset);}
-    .tag-crs{font-family:var(--font-mono);font-size:.68rem;background:var(--primary-hl);color:var(--primary);padding:2px 8px;border-radius:var(--r-sm);font-weight:700;}
-    .tag-fmt{font-size:.6rem;background:var(--surface-offset);color:var(--text-muted);padding:2px 8px;border-radius:var(--r-sm);text-transform:uppercase;letter-spacing:.07em;font-weight:600;border:1px solid var(--border);}
-    .tag-done{font-size:.68rem;color:var(--success);font-weight:700;display:flex;align-items:center;gap:4px;}
-    .empty-state{display:flex;flex-direction:column;align-items:center;padding:40px 20px;color:var(--text-faint);text-align:center;gap:8px;}
-    .empty-state p{font-size:.78rem;}
-
-    /* TOASTS */
-    .toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
-    @keyframes toast-in{from{transform:translateX(12px) scale(.96);opacity:0}to{transform:none;opacity:1}}
-    @keyframes toast-out{to{opacity:0;transform:translateX(8px)}}
-    .toast{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);font-size:.78rem;min-width:200px;max-width:320px;animation:toast-in .2s var(--ease) both;}
-    .toast.leaving{animation:toast-out .18s ease forwards;}
-    .toast-ok svg{color:var(--success);}
-    .toast-err svg{color:var(--error);}
-
-    /* FOOTER */
-    footer{border-top:1px solid var(--divider);background:var(--surface);padding:clamp(1rem,3vw,1.75rem) clamp(1rem,4vw,2rem);}
-    .footer-inner{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-    .footer-left{font-size:.7rem;color:var(--text-muted);}
-    .footer-right{display:flex;gap:18px;align-items:center;}
-    .footer-link{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;}
-    .footer-link:hover{color:var(--primary);}
-
+    tbody tr{transition:background var(--t);}
+    tbody tr:hover td{background:var(--surface-2);}
+    .tcrs{font-family:var(--mono);font-size:.67rem;background:var(--primary-hl);color:var(--primary);padding:2px 8px;border-radius:var(--rsm);font-weight:700;}
+    .tfmt{font-size:.58rem;background:var(--surface-off);color:var(--muted);padding:2px 8px;border-radius:var(--rsm);text-transform:uppercase;letter-spacing:.07em;font-weight:600;border:1px solid var(--border);}
+    .tok{font-size:.67rem;color:var(--success);font-weight:700;display:flex;align-items:center;gap:4px;}
+    .empty-s{display:flex;flex-direction:column;align-items:center;padding:40px 20px;color:var(--faint);text-align:center;gap:8px;font-size:.76rem;}
+    .tc{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:7px;}
+    @keyframes tin{from{transform:translateX(10px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+    @keyframes tout{to{opacity:0;transform:translateX(8px)}}
+    .toast{display:flex;align-items:center;gap:9px;padding:10px 15px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);box-shadow:var(--sh-lg);font-size:.76rem;min-width:190px;max-width:300px;animation:tin .2s var(--ease) both;}
+    .toast.out{animation:tout .18s ease forwards;}
+    .tok-ok svg{color:var(--success);}
+    .tok-err svg{color:var(--error);}
+    footer{border-top:1px solid var(--divider);background:var(--surface-2);padding:clamp(1rem,3vw,1.5rem) clamp(1.25rem,4vw,2.5rem);}
+    .fi-footer{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+    .fl-left{font-size:.68rem;color:var(--muted);}
+    .fl-right{display:flex;gap:16px;}
+    .flink{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;}
+    .flink:hover{color:var(--primary);}
     @media(max-width:600px){
-      .hero h1{font-size:1.65rem;}
-      .nav-pill{display:none;}
-      .btn-row{flex-direction:column;}
+      .hero h1{font-size:1.9rem;}
+      .nav-badge{display:none;}
+      .brow{flex-direction:column;}
       .btn{width:100%;justify-content:center;}
     }
-
-    /* Leaflet dark-mode tint */
-    [data-theme="dark"] .leaflet-tile{filter:brightness(.7) invert(1) contrast(3) hue-rotate(200deg) saturate(.3) brightness(.7);}
-    [data-theme="dark"] .leaflet-container{background:#1a1917;}
   </style>
 </head>
 <body>
-
 <nav role="banner">
   <div class="nav-left">
-    <a href="#" class="nav-logo" aria-label="Lila CRS Converter">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-        <rect width="28" height="28" rx="6" fill="var(--primary)"/>
-        <path d="M7 14C7 10.13 10.13 7 14 7C17.87 7 21 10.13 21 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        <path d="M14 21C10.13 21 7 17.87 7 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 2"/>
-        <circle cx="14" cy="14" r="2.5" fill="white"/>
-        <path d="M14 7L14 4M21 14L24 14" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-      <span class="nav-brand">Lila <span>CRS</span></span>
-    </a>
-    <span class="nav-pill">Geospatial Tool</span>
+    <a href="#" class="nav-brand" aria-label="Lila CRS Converter">Lila <em>CRS</em></a>
+    <span class="nav-badge">Geospatial Tool</span>
   </div>
-  <div class="nav-actions">
+  <div class="nav-right">
     <a href="https://epsg.io" class="nav-link" target="_blank" rel="noopener noreferrer">EPSG.io</a>
     <a href="https://github.com/Athithiyanmr/Lila-crs-converter" class="nav-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <button class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <button class="nav-icon-btn" data-theme-toggle aria-label="Toggle dark mode">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
   </div>
 </nav>
-
-<section class="hero" aria-labelledby="hero-heading">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">Coordinate Reprojection</div>
-    <h1 id="hero-heading">Reproject <em>Spatial Data</em><br>with Precision</h1>
-    <p>Upload GeoTIFF, GeoJSON, or Shapefiles and instantly convert to any coordinate reference system.</p>
-    <div class="hero-formats">
-      <span class="fmt-chip active">GeoTIFF</span>
-      <span class="fmt-chip active">GeoJSON</span>
-      <span class="fmt-chip active">Shapefile</span>
-      <span class="fmt-chip">GeoPackage out</span>
-      <span class="fmt-chip">Any EPSG</span>
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag"><span class="hero-tag-line"></span>Coordinate Reference Systems</div>
+    <h1>Reproject <em>spatial data</em><br>with confidence</h1>
+    <p class="hero-desc">Upload GeoTIFF, GeoJSON, or Shapefiles. Convert to any EPSG — instantly, accurately, and locally.</p>
+    <div class="hero-chips">
+      <span class="chip on">GeoTIFF</span>
+      <span class="chip on">GeoJSON</span>
+      <span class="chip on">Shapefile</span>
+      <span class="chip on">Any EPSG</span>
+      <span class="chip">GeoPackage out</span>
     </div>
   </div>
 </section>
-
 <main id="main">
-  <div class="wrap">
-
-    <!-- STEP 1 -->
-    <div class="step-row">
-      <div class="step-badge"><div class="step-num-circle">1</div>Upload Files</div>
-      <div class="step-line"></div>
+<div class="page">
+  <div class="sh"><div class="sh-num" id="sn1">1</div><span class="sh-label">Upload Files</span><div class="sh-line"></div></div>
+  <div class="card">
+    <div class="card-title">
+      <div class="card-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      Upload Spatial Files
     </div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="ph-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-        Upload Spatial Files
-      </div>
-      <p class="panel-sub">Accepts GeoTIFF (.tif), GeoJSON (.geojson), or Shapefiles. Upload all Shapefile parts together.</p>
-      <div class="alert a-info">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <span>Shapefiles require all four parts: <strong>.shp .shx .dbf .prj</strong></span>
-      </div>
-      <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Upload spatial files">
-        <input type="file" id="file-input" multiple accept=".tif,.tiff,.geojson,.shp,.shx,.dbf,.prj"/>
-        <div class="drop-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
-        <div class="drop-title">Drop files here</div>
-        <div class="drop-sub">or click to browse</div>
-        <div class="drop-accepted">.tif · .geojson · .shp · .shx · .dbf · .prj</div>
-      </div>
-      <div class="file-list" id="file-list" aria-live="polite"></div>
-
-      <!-- File metadata cards -->
-      <div id="meta-cards" style="display:none;">
-        <hr class="rule"/>
-        <div style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px;">File Info</div>
-        <div class="meta-grid" id="meta-grid"></div>
-      </div>
+    <p class="card-desc">Accepts GeoTIFF, GeoJSON and Shapefiles. For Shapefiles, upload all parts together.</p>
+    <div class="alert a-info">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Shapefiles need all four parts: <strong>.shp &nbsp;.shx &nbsp;.dbf &nbsp;.prj</strong></span>
     </div>
-
-    <!-- STEP 2 -->
-    <div class="step-row">
-      <div class="step-badge"><div class="step-num-circle">2</div>Configure</div>
-      <div class="step-line"></div>
+    <div class="dropzone" id="dz" tabindex="0" role="button" aria-label="Upload spatial files">
+      <input type="file" id="finput" multiple accept=".tif,.tiff,.geojson,.shp,.shx,.dbf,.prj"/>
+      <div class="dz-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+      <div class="dz-title">Drop files here</div>
+      <div class="dz-sub">or click to browse</div>
+      <div class="dz-formats">.tif · .geojson · .shp · .shx · .dbf · .prj</div>
     </div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="ph-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
-        Detect &amp; Set CRS
-      </div>
-      <p class="panel-sub">Auto-detect the source CRS from your file, then search and choose your target projection.</p>
-
-      <button class="btn btn-detect" id="detect-btn">
-        <span class="btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
-        <span class="btn-spinner" aria-hidden="true"></span>
-        Detect Source CRS
-      </button>
-
-      <div class="crs-detected" id="crs-detected" role="status" aria-live="polite">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span style="color:var(--text-muted);font-size:.76rem;">Detected source:</span>
-        <span class="crs-val" id="crs-val">—</span>
-      </div>
-
+    <div class="filelist" id="flist" aria-live="polite"></div>
+    <div id="mcard-wrap" style="display:none;">
       <hr class="rule"/>
-
-      <div class="form-grid">
-        <div class="fg">
-          <label class="fl" for="target-crs-search">Target CRS</label>
-          <div class="epsg-search-wrap">
-            <input class="fi" type="text" id="target-crs-search" placeholder="Search EPSG code or name…" autocomplete="off" spellcheck="false"/>
-            <svg class="epsg-spinner" id="epsg-spinner" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" style="animation:spin .7s linear infinite;position:absolute;right:10px;top:50%;transform:translateY(-50%);display:none;">
-              <circle cx="12" cy="12" r="9" stroke-dasharray="40 20"/>
-            </svg>
-            <div class="epsg-results" id="epsg-results" role="listbox"></div>
-          </div>
-          <span class="fh" id="selected-crs-hint" style="display:none;"></span>
-        </div>
-        <div class="fg">
-          <label class="fl" for="output-fmt">Output Format</label>
-          <select class="fs" id="output-fmt">
-            <option value="geojson">GeoJSON (.geojson)</option>
-            <option value="gpkg">GeoPackage (.gpkg)</option>
-            <option value="shapefile">Shapefile (.zip)</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="alert a-warn" id="size-warning" style="display:none;margin-top:12px;" role="alert">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <span id="size-warn-text">Large file detected — conversion may take several minutes.</span>
-      </div>
+      <div style="font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:7px;">File Info</div>
+      <div class="meta-grid" id="mgrid"></div>
     </div>
-
-    <!-- STEP 3 -->
-    <div class="step-row">
-      <div class="step-badge"><div class="step-num-circle">3</div>Convert &amp; Download</div>
-      <div class="step-line"></div>
-    </div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="ph-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
-        Convert CRS
-      </div>
-      <p class="panel-sub">Reproject your spatial data. The converted file will be ready to download once complete.</p>
-
-      <div class="btn-row">
-        <button class="btn btn-primary" id="convert-btn" disabled>
-          <span class="btn-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
-          <span class="btn-spinner" aria-hidden="true"></span>
-          Convert CRS
-        </button>
-        <button class="btn btn-ghost" id="reset-btn">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-          Reset All
-        </button>
-      </div>
-
-      <div class="progress-wrap" id="progress-wrap" aria-live="polite">
-        <div class="progress-label">
-          <span class="progress-text" id="progress-text">Reprojecting…</span>
-        </div>
-        <div class="progress-track" role="progressbar">
-          <div class="progress-bar"></div>
-        </div>
-      </div>
-
-      <div class="dl-wrap" id="dl-wrap">
-        <button class="btn btn-download" id="dl-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Converted File
-        </button>
-      </div>
-
-      <!-- Map Preview -->
-      <div class="map-section" id="map-section">
-        <div class="map-label">Output Preview</div>
-        <div id="map-container"></div>
-      </div>
-    </div>
-
-    <!-- HISTORY -->
-    <div class="step-row" style="margin-top:8px;">
-      <div class="step-badge"><div class="step-num-circle" style="background:var(--surface-offset);color:var(--text-faint);border-color:var(--border);">&#8635;</div>Session History</div>
-      <div class="step-line"></div>
-    </div>
-    <div class="panel">
-      <div class="tbl-wrap">
-        <table aria-label="Conversion history">
-          <thead><tr><th>Files</th><th>Source CRS</th><th>Target CRS</th><th>Format</th><th>Status</th><th>Time</th></tr></thead>
-          <tbody id="history-body"></tbody>
-        </table>
-        <div class="empty-state" id="empty-state">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <p>No conversions yet this session</p>
-        </div>
-      </div>
-    </div>
-
   </div>
+  <div class="sh" style="margin-top:4px;"><div class="sh-num passive" id="sn2">2</div><span class="sh-label passive" id="sl2">Configure</span><div class="sh-line"></div></div>
+  <div class="card">
+    <div class="card-title">
+      <div class="card-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+      Detect &amp; Set CRS
+    </div>
+    <p class="card-desc">Detect the source CRS from your file, then search for any target projection by name or EPSG code.</p>
+    <button class="btn btn-d" id="detect-btn">
+      <span class="bi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></span>
+      <span class="bsp" aria-hidden="true"></span>
+      Detect Source CRS
+    </button>
+    <div class="crs-badge" id="crs-badge" role="status" aria-live="polite">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Detected source:</span>
+      <span class="crs-code" id="crs-val">—</span>
+    </div>
+    <hr class="rule"/>
+    <div class="fgrid">
+      <div class="fg">
+        <label class="fl" for="crs-search">Target CRS</label>
+        <div class="search-wrap">
+          <input class="fi" type="text" id="crs-search" placeholder="Search by name or EPSG code…" autocomplete="off" spellcheck="false"/>
+          <div class="search-results" id="sr-box" role="listbox"></div>
+        </div>
+        <span class="fhint" id="crs-hint" style="display:none;"></span>
+      </div>
+      <div class="fg">
+        <label class="fl" for="ofmt">Output Format</label>
+        <select class="fs" id="ofmt">
+          <option value="geojson">GeoJSON (.geojson)</option>
+          <option value="gpkg">GeoPackage (.gpkg)</option>
+          <option value="shapefile">Shapefile (.zip)</option>
+        </select>
+      </div>
+    </div>
+    <div class="alert a-warn" id="size-warn" style="display:none;margin-top:12px;" role="alert">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span id="size-warn-txt">Large file — conversion may take a few minutes.</span>
+    </div>
+  </div>
+  <div class="sh" style="margin-top:4px;"><div class="sh-num passive" id="sn3">3</div><span class="sh-label passive" id="sl3">Convert &amp; Download</span><div class="sh-line"></div></div>
+  <div class="card">
+    <div class="card-title">
+      <div class="card-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
+      Convert CRS
+    </div>
+    <p class="card-desc">Reproject your spatial data. Download the result once complete.</p>
+    <div class="brow">
+      <button class="btn btn-p" id="conv-btn" disabled>
+        <span class="bi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></span>
+        <span class="bsp" aria-hidden="true"></span>
+        Convert CRS
+      </button>
+      <button class="btn btn-g" id="reset-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+        Reset All
+      </button>
+    </div>
+    <div class="prog" id="prog">
+      <p class="prog-lbl" id="prog-lbl">Reprojecting…</p>
+      <div class="prog-track" role="progressbar"><div class="prog-fill"></div></div>
+    </div>
+    <div class="dl-row" id="dl-row">
+      <button class="btn btn-d" id="dl-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Converted File
+      </button>
+    </div>
+    <div class="map-wrap" id="map-wrap">
+      <div class="map-label">Output Preview</div>
+      <div id="map"></div>
+    </div>
+  </div>
+  <div class="sh" style="margin-top:4px;">
+    <div class="sh-num passive" style="font-size:.7rem;">↺</div>
+    <span class="sh-label passive">Session History</span>
+    <div class="sh-line"></div>
+  </div>
+  <div class="card">
+    <div class="tbl-wrap">
+      <table aria-label="Conversion history">
+        <thead><tr><th>Files</th><th>Source CRS</th><th>Target CRS</th><th>Format</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody id="hbody"></tbody>
+      </table>
+      <div class="empty-s" id="empty-s">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <p>No conversions this session yet</p>
+      </div>
+    </div>
+  </div>
+</div>
 </main>
-
 <footer role="contentinfo">
-  <div class="footer-inner">
-    <p class="footer-left">Built by <strong>Athithiyan MR</strong> &mdash; Lila CRS Converter</p>
-    <nav class="footer-right" aria-label="Footer links">
-      <a href="https://epsg.io" class="footer-link" target="_blank" rel="noopener noreferrer">EPSG.io</a>
-      <a href="https://proj.org" class="footer-link" target="_blank" rel="noopener noreferrer">PROJ Docs</a>
-      <a href="https://github.com/Athithiyanmr/Lila-crs-converter" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+  <div class="fi-footer">
+    <p class="fl-left">Built by <strong>Athithiyan MR</strong> &mdash; Lila CRS Converter</p>
+    <nav class="fl-right" aria-label="Footer links">
+      <a href="https://epsg.io" class="flink" target="_blank" rel="noopener noreferrer">EPSG.io</a>
+      <a href="https://proj.org" class="flink" target="_blank" rel="noopener noreferrer">PROJ Docs</a>
+      <a href="https://github.com/Athithiyanmr/Lila-crs-converter" class="flink" target="_blank" rel="noopener noreferrer">GitHub</a>
     </nav>
   </div>
 </footer>
-
-<div class="toast-container" id="toast-container" aria-live="assertive" role="status"></div>
-
+<div class="tc" id="tc" aria-live="assertive" role="status"></div>
 <script>
 (function(){
-  /* ---- THEME ---- */
-  const html=document.documentElement,toggle=document.querySelector('[data-theme-toggle]');
+  const html=document.documentElement,ttoggle=document.querySelector('[data-theme-toggle]');
   let theme=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
-  html.setAttribute('data-theme',theme);updateToggleIcon();
-  toggle.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';html.setAttribute('data-theme',theme);updateToggleIcon();});
-  function updateToggleIcon(){
-    toggle.innerHTML=theme==='dark'
-      ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-      :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    toggle.setAttribute('aria-label','Switch to '+(theme==='dark'?'light':'dark')+' mode');
-  }
-
-  /* ---- STATE ---- */
+  html.setAttribute('data-theme',theme);syncIcon();
+  ttoggle.addEventListener('click',()=>{theme=theme==='dark'?'light':'dark';html.setAttribute('data-theme',theme);syncIcon();});
+  function syncIcon(){ttoggle.innerHTML=theme==='dark'?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';ttoggle.setAttribute('aria-label','Switch to '+(theme==='dark'?'light':'dark')+' mode');}
   const API='http://geocrs-api:8000';
-  let files=[],blob=null,fname='',detectedCRS='',selectedCRS='',selectedCRSName='',history=[];
-  let map=null,previewLayer=null;
-
-  /* ---- UTILS ---- */
-  function fmtSize(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB';}
-  function getExt(n){return n.split('.').pop().toLowerCase();}
-  function toast(msg,type='ok'){
-    const c=document.getElementById('toast-container'),el=document.createElement('div');
-    el.className='toast toast-'+type;
-    const ico=type==='ok'
-      ?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
-      :'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-    el.innerHTML=ico+'<span>'+msg+'</span>';
-    c.appendChild(el);
-    setTimeout(()=>{el.classList.add('leaving');setTimeout(()=>el.remove(),200);},3400);
-  }
-
-  /* ---- DROP ZONE ---- */
-  const dropZone=document.getElementById('drop-zone'),fileInput=document.getElementById('file-input'),fileListEl=document.getElementById('file-list');
-  ['dragenter','dragover'].forEach(e=>dropZone.addEventListener(e,ev=>{ev.preventDefault();dropZone.classList.add('drag-over');}));
-  ['dragleave','drop'].forEach(e=>dropZone.addEventListener(e,ev=>{ev.preventDefault();dropZone.classList.remove('drag-over');}));
-  dropZone.addEventListener('drop',ev=>addFiles(ev.dataTransfer.files));
-  fileInput.addEventListener('change',()=>addFiles(fileInput.files));
-  dropZone.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fileInput.click();}});
-
-  function addFiles(incoming){
-    files=[...files,...Array.from(incoming)];
-    renderFiles();checkSize();updateConvertBtn();
-    if(files.length) fetchFileInfo();
-  }
-  function renderFiles(){
-    fileListEl.innerHTML='';
-    files.forEach((f,i)=>{
-      const ext=getExt(f.name),item=document.createElement('div');
-      item.className='file-item';item.style.animationDelay=(i*40)+'ms';
-      item.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="file-ext">'+ext+'</span><span class="file-name">'+f.name+'</span><span class="file-size">'+fmtSize(f.size)+'</span><button class="file-remove" data-i="'+i+'" aria-label="Remove '+f.name+'"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
-      fileListEl.appendChild(item);
-    });
-    fileListEl.querySelectorAll('.file-remove').forEach(b=>b.addEventListener('click',()=>{files.splice(+b.dataset.i,1);renderFiles();checkSize();updateConvertBtn();if(!files.length)hideMetaCards();}));
-  }
-  function checkSize(){
-    const w=document.getElementById('size-warning'),t=document.getElementById('size-warn-text');
-    if(!files.length){w.style.display='none';return;}
-    const mb=files.reduce((s,f)=>s+f.size,0)/1048576;
-    if(mb>100){w.style.display='flex';t.textContent=mb.toFixed(1)+' MB total — conversion may take several minutes.';}
-    else w.style.display='none';
-  }
-
-  /* ---- FILE INFO ---- */
-  async function fetchFileInfo(){
-    try{
-      const fd=new FormData();files.forEach(f=>fd.append('files',f));
-      const res=await fetch(API+'/file-info',{method:'POST',body:fd});
-      if(!res.ok)return;
-      const d=await res.json();
-      renderMetaCards(d);
-    }catch(e){}
-  }
-  function renderMetaCards(d){
-    const grid=document.getElementById('meta-grid'),section=document.getElementById('meta-cards');
-    const items=[
-      {label:'CRS',value:d.crs||'—',cls:'crs-tag'},
-      {label:'Type',value:d.type||'—'},
-      {label:'Features',value:d.feature_count!=null?d.feature_count.toLocaleString():'—'},
-      {label:'Bands',value:d.band_count!=null?d.band_count:'—'},
-      {label:'Width',value:d.width?d.width+'px':'—'},
-      {label:'Height',value:d.height?d.height+'px':'—'},
-    ].filter(i=>i.value!=='—');
-    if(!items.length)return;
-    grid.innerHTML=items.map(i=>'<div class="meta-card"><div class="meta-label">'+i.label+'</div><div class="meta-value '+(i.cls||'')+'">'+i.value+'</div></div>').join('');
-    section.style.display='block';
-  }
-  function hideMetaCards(){document.getElementById('meta-cards').style.display='none';}
-
-  /* ---- EPSG LIVE SEARCH ---- */
-  const searchInput=document.getElementById('target-crs-search');
-  const resultsBox=document.getElementById('epsg-results');
-  const spinner=document.getElementById('epsg-spinner');
-  const hint=document.getElementById('selected-crs-hint');
-  let searchTimer=null,activeIdx=-1;
-
-  const POPULAR=[
-    {code:'EPSG:4326',name:'WGS 84',area:'World'},
-    {code:'EPSG:3857',name:'WGS 84 / Pseudo-Mercator',area:'World'},
-    {code:'EPSG:32643',name:'WGS 84 / UTM zone 43N',area:'India'},
-    {code:'EPSG:32644',name:'WGS 84 / UTM zone 44N',area:'India'},
-    {code:'EPSG:32645',name:'WGS 84 / UTM zone 45N',area:'India'},
-    {code:'EPSG:32646',name:'WGS 84 / UTM zone 46N',area:'India'},
-    {code:'EPSG:7755',name:'WGS 84 / India NSF LCC',area:'India'},
-    {code:'EPSG:24378',name:'Kalianpur 1937 / India I',area:'India'},
-    {code:'EPSG:4979',name:'WGS 84 (3D)',area:'World'},
-  ];
-
-  searchInput.addEventListener('focus',()=>{if(!searchInput.value.trim())showPopular();});
-  searchInput.addEventListener('input',()=>{
-    clearTimeout(searchTimer);
-    const q=searchInput.value.trim();
-    selectedCRS='';selectedCRSName='';hint.style.display='none';updateConvertBtn();
-    if(!q){showPopular();return;}
-    if(q.length<2){closeResults();return;}
-    searchTimer=setTimeout(()=>doSearch(q),280);
-  });
-  searchInput.addEventListener('keydown',e=>{
-    const items=resultsBox.querySelectorAll('.epsg-item');
-    if(e.key==='ArrowDown'){e.preventDefault();activeIdx=Math.min(activeIdx+1,items.length-1);updateActive(items);}
-    else if(e.key==='ArrowUp'){e.preventDefault();activeIdx=Math.max(activeIdx-1,0);updateActive(items);}
-    else if(e.key==='Enter'){e.preventDefault();if(activeIdx>=0&&items[activeIdx])selectItem(items[activeIdx]);}
-    else if(e.key==='Escape'){closeResults();}
-  });
-  document.addEventListener('click',e=>{if(!e.target.closest('.epsg-search-wrap'))closeResults();});
-
-  function showPopular(){renderResults(POPULAR);}
-  async function doSearch(q){
-    spinner.style.display='block';
-    try{
-      const url='https://epsg.io/?format=json&q='+encodeURIComponent(q);
-      const res=await fetch(url);
-      const d=await res.json();
-      const results=(d.results||[]).slice(0,12).map(r=>({code:r.code?'EPSG:'+r.code:r.authority+':'+r.code,name:r.name,area:r.area||''}));
-      renderResults(results.length?results:POPULAR.filter(p=>p.code.includes(q.toUpperCase())||p.name.toLowerCase().includes(q.toLowerCase())));
-    }catch{
-      const q2=q.toUpperCase();
-      renderResults(POPULAR.filter(p=>p.code.includes(q2)||p.name.toLowerCase().includes(q.toLowerCase())));
-    }finally{spinner.style.display='none';}
-  }
-  function renderResults(items){
-    activeIdx=-1;
-    if(!items.length){closeResults();return;}
-    resultsBox.innerHTML=items.map((r)=>'<div class="epsg-item" role="option" data-code="'+r.code+'" data-name="'+r.name+'" tabindex="-1"><div class="epsg-code">'+r.code+'</div><div class="epsg-name">'+r.name+'</div>'+(r.area?'<div class="epsg-area">'+r.area+'</div>':'')+'</div>').join('');
-    resultsBox.querySelectorAll('.epsg-item').forEach((el,idx)=>{
-      el.addEventListener('click',()=>selectItem(el));
-      el.addEventListener('mouseenter',()=>{activeIdx=idx;updateActive(resultsBox.querySelectorAll('.epsg-item'));});
-    });
-    resultsBox.classList.add('open');
-  }
-  function updateActive(items){items.forEach((el,i)=>el.classList.toggle('active',i===activeIdx));}
-  function selectItem(el){
-    selectedCRS=el.dataset.code;selectedCRSName=el.dataset.name;
-    searchInput.value=selectedCRS+' — '+selectedCRSName;
-    hint.textContent=selectedCRSName;hint.style.display='block';
-    closeResults();updateConvertBtn();toast('Selected: '+selectedCRS);
-  }
-  function closeResults(){resultsBox.classList.remove('open');activeIdx=-1;}
-  function updateConvertBtn(){document.getElementById('convert-btn').disabled=!(files.length&&selectedCRS);}
-
-  /* ---- DETECT CRS ---- */
-  document.getElementById('detect-btn').addEventListener('click',async()=>{
-    if(!files.length){toast('Upload files first.','err');return;}
-    const btn=document.getElementById('detect-btn');
-    btn.classList.add('loading');btn.disabled=true;
-    try{
-      const fd=new FormData();files.forEach(f=>fd.append('files',f));
-      const res=await fetch(API+'/detect-crs',{method:'POST',body:fd});
-      const d=await res.json();
-      if(res.ok){detectedCRS=d.crs||'Unknown';document.getElementById('crs-val').textContent=detectedCRS;document.getElementById('crs-detected').classList.add('on');toast('Detected: '+detectedCRS);}
-      else toast(d.detail||'Detection failed.','err');
-    }catch{
-      detectedCRS='EPSG:4326';document.getElementById('crs-val').textContent=detectedCRS+' (demo)';document.getElementById('crs-detected').classList.add('on');toast('Demo mode — server not connected','err');
-    }finally{btn.classList.remove('loading');btn.disabled=false;}
-  });
-
-  /* ---- CONVERT ---- */
-  document.getElementById('convert-btn').addEventListener('click',async()=>{
-    if(!files.length||!selectedCRS){toast('Upload files & select a target CRS.','err');return;}
-    const btn=document.getElementById('convert-btn'),pw=document.getElementById('progress-wrap'),pt=document.getElementById('progress-text'),dw=document.getElementById('dl-wrap');
-    const fmt=document.getElementById('output-fmt').value;
-    const fmtMap={geojson:'reprojected.geojson',gpkg:'reprojected.gpkg',shapefile:'reprojected.zip'};
-    fname=files.some(f=>/\.(tif|tiff)$/i.test(f.name))?'reprojected.tif':fmtMap[fmt];
-    btn.classList.add('loading');btn.disabled=true;pw.classList.add('on');dw.classList.remove('on');
-    pt.textContent='Reprojecting…';
-    try{
-      const fd=new FormData();files.forEach(f=>fd.append('files',f));fd.append('target_crs',selectedCRS);fd.append('output_format',fmt);
-      const res=await fetch(API+'/convert',{method:'POST',body:fd});
-      if(res.ok){
-        blob=await res.blob();pw.classList.remove('on');dw.classList.add('on');toast('Conversion complete!');
-        addHistory(files.map(f=>f.name).join(', '),detectedCRS||'—',selectedCRS,fmt);
-        if(fmt==='geojson')renderMapPreview(blob);
-      }else{const d=await res.json();toast(d.detail||'Conversion failed.','err');pw.classList.remove('on');}
-    }catch{
-      pt.textContent='Demo mode — server not connected.';
-      setTimeout(()=>{pw.classList.remove('on');toast('Demo mode','err');},2000);
-    }finally{btn.classList.remove('loading');btn.disabled=false;updateConvertBtn();}
-  });
-
-  /* ---- MAP PREVIEW ---- */
-  function renderMapPreview(geojsonBlob){
-    const reader=new FileReader();
-    reader.onload=e=>{
-      try{
-        const geojson=JSON.parse(e.target.result);
-        const section=document.getElementById('map-section');section.classList.add('on');
-        if(!map){
-          map=L.map('map-container',{zoomControl:true});
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);
-        }
-        if(previewLayer){map.removeLayer(previewLayer);}
-        previewLayer=L.geoJSON(geojson,{style:{color:'#01696f',weight:2,fillOpacity:.15}}).addTo(map);
-        map.fitBounds(previewLayer.getBounds(),{padding:[20,20]});
-      }catch(err){console.warn('Map preview failed:',err);}
-    };
-    reader.readAsText(geojsonBlob);
-  }
-
-  /* ---- DOWNLOAD ---- */
-  document.getElementById('dl-btn').addEventListener('click',()=>{
-    if(!blob){toast('No file ready.','err');return;}
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();
-    toast('Downloading '+fname);
-  });
-
-  /* ---- RESET ---- */
-  document.getElementById('reset-btn').addEventListener('click',()=>{
-    files=[];blob=null;fname='';detectedCRS='';selectedCRS='';selectedCRSName='';
-    fileListEl.innerHTML='';fileInput.value='';
-    document.getElementById('crs-detected').classList.remove('on');
-    document.getElementById('crs-val').textContent='—';
-    document.getElementById('dl-wrap').classList.remove('on');
-    document.getElementById('progress-wrap').classList.remove('on');
-    document.getElementById('size-warning').style.display='none';
-    document.getElementById('map-section').classList.remove('on');
-    searchInput.value='';hint.style.display='none';closeResults();
-    hideMetaCards();if(previewLayer&&map){map.removeLayer(previewLayer);previewLayer=null;}
-    updateConvertBtn();toast('Reset complete.');
-  });
-
-  /* ---- HISTORY ---- */
-  function addHistory(fileNames,src,tgt,fmt){
-    history.unshift({files:fileNames,src,tgt,fmt,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
-    renderHistory();
-  }
-  function renderHistory(){
-    const tbody=document.getElementById('history-body'),empty=document.getElementById('empty-state');
-    if(!history.length){tbody.innerHTML='';empty.style.display='flex';return;}
-    empty.style.display='none';
-    tbody.innerHTML=history.map(h=>'<tr><td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--font-mono);font-size:.7rem">'+h.files+'</td><td><span class="tag-crs" style="opacity:.7">'+h.src+'</span></td><td><span class="tag-crs">'+h.tgt+'</span></td><td><span class="tag-fmt">'+h.fmt+'</span></td><td><span class="tag-done"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Done</span></td><td style="color:var(--text-faint);font-size:.7rem;font-family:var(--font-mono)">'+h.time+'</td></tr>').join('');
-  }
-  renderHistory();
+  let files=[],blob=null,fname='',srcCRS='',tgtCRS='',tgtName='',history=[],map=null,layer=null;
+  function sz(b){return b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(1)+' MB';}
+  function ext(n){return n.split('.').pop().toLowerCase();}
+  function toast(msg,type='ok'){const c=document.getElementById('tc'),el=document.createElement('div');el.className='toast tok-'+type;el.innerHTML=(type==='ok'?'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>':'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>')+'<span>'+msg+'</span>';c.appendChild(el);setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),200);},3400);}
+  function setStep(n){for(let i=1;i<=3;i++){const num=document.getElementById('sn'+i),lbl=document.getElementById('sl'+i);if(!num)continue;if(i<n){num.className='sh-num done';num.innerHTML='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';}else if(i===n){num.className='sh-num';num.textContent=i;if(lbl){lbl.className='sh-label';}}else{num.className='sh-num passive';num.textContent=i;if(lbl){lbl.className='sh-label passive';}}}}
+  const dz=document.getElementById('dz'),fi=document.getElementById('finput'),fl=document.getElementById('flist');
+  ['dragenter','dragover'].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.add('over');}));
+  ['dragleave','drop'].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.remove('over');}));
+  dz.addEventListener('drop',ev=>add(ev.dataTransfer.files));
+  fi.addEventListener('change',()=>add(fi.files));
+  dz.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fi.click();}});
+  function add(inc){files=[...files,...Array.from(inc)];render();sizeCheck();canConvert();setStep(files.length?2:1);getInfo();}
+  function render(){fl.innerHTML='';files.forEach((f,i)=>{const d=document.createElement('div');d.className='fitem';d.style.animationDelay=(i*35)+'ms';d.innerHTML='<span class="fext">'+ext(f.name)+'</span><span class="fname">'+f.name+'</span><span class="fsize">'+sz(f.size)+'</span>'+'<button class="frem" data-i="'+i+'" aria-label="Remove '+f.name+'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';fl.appendChild(d);});fl.querySelectorAll('.frem').forEach(b=>b.addEventListener('click',()=>{files.splice(+b.dataset.i,1);render();sizeCheck();canConvert();if(!files.length){hideMeta();setStep(1);}}));}
+  function sizeCheck(){const w=document.getElementById('size-warn'),t=document.getElementById('size-warn-txt');if(!files.length){w.style.display='none';return;}const mb=files.reduce((s,f)=>s+f.size,0)/1048576;if(mb>100){w.style.display='flex';t.textContent=mb.toFixed(1)+' MB total — conversion may take a few minutes.';}else w.style.display='none';}
+  async function getInfo(){try{const fd=new FormData();files.forEach(f=>fd.append('files',f));const res=await fetch(API+'/file-info',{method:'POST',body:fd});if(!res.ok)return;const d=await res.json();const items=[{l:'CRS',v:d.crs||'—',c:'crs'},{l:'Type',v:d.type||'—'},{l:'Features',v:d.feature_count!=null?d.feature_count.toLocaleString():'—'},{l:'Bands',v:d.band_count!=null?d.band_count:'—'},{l:'Width',v:d.width?d.width+'px':'—'},{l:'Height',v:d.height?d.height+'px':'—'}].filter(x=>x.v!=='—');if(!items.length)return;const g=document.getElementById('mgrid');g.innerHTML=items.map(x=>'<div class="mcard"><div class="mcard-lbl">'+x.l+'</div><div class="mcard-val '+(x.c||'')+'">'+ x.v+'</div></div>').join('');document.getElementById('mcard-wrap').style.display='block';}catch{}}
+  function hideMeta(){document.getElementById('mcard-wrap').style.display='none';}
+  const si=document.getElementById('crs-search'),sr=document.getElementById('sr-box'),hint=document.getElementById('crs-hint');
+  let stimer=null,ai=-1;
+  const POP=[{code:'EPSG:4326',name:'WGS 84',area:'World'},{code:'EPSG:3857',name:'WGS 84 / Pseudo-Mercator',area:'World'},{code:'EPSG:32643',name:'WGS 84 / UTM zone 43N',area:'India'},{code:'EPSG:32644',name:'WGS 84 / UTM zone 44N',area:'India'},{code:'EPSG:32645',name:'WGS 84 / UTM zone 45N',area:'India'},{code:'EPSG:32646',name:'WGS 84 / UTM zone 46N',area:'India'},{code:'EPSG:7755',name:'WGS 84 / India NSF LCC',area:'India'},{code:'EPSG:24378',name:'Kalianpur 1937 / India I',area:'India'}];
+  si.addEventListener('focus',()=>{if(!si.value.trim())showR(POP);});
+  si.addEventListener('input',()=>{clearTimeout(stimer);const q=si.value.trim();tgtCRS='';tgtName='';hint.style.display='none';canConvert();if(!q){showR(POP);return;}if(q.length<2){closeR();return;}stimer=setTimeout(()=>doSearch(q),260);});
+  si.addEventListener('keydown',e=>{const its=sr.querySelectorAll('.sr-item');if(e.key==='ArrowDown'){e.preventDefault();ai=Math.min(ai+1,its.length-1);setAI(its);}else if(e.key==='ArrowUp'){e.preventDefault();ai=Math.max(ai-1,0);setAI(its);}else if(e.key==='Enter'){e.preventDefault();if(ai>=0&&its[ai])pick(its[ai]);}else if(e.key==='Escape')closeR();});
+  document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))closeR();});
+  function showR(items){ai=-1;if(!items.length){closeR();return;}sr.innerHTML=items.map(r=>'<div class="sr-item" role="option" data-code="'+r.code+'" data-name="'+r.name+'" tabindex="-1"><div class="sr-code">'+r.code+'</div><div class="sr-name">'+r.name+'</div>'+(r.area?'<div class="sr-area">'+r.area+'</div>':'')+'</div>').join('');sr.querySelectorAll('.sr-item').forEach((el,idx)=>{el.addEventListener('click',()=>pick(el));el.addEventListener('mouseenter',()=>{ai=idx;setAI(sr.querySelectorAll('.sr-item'));});});sr.classList.add('open');}
+  async function doSearch(q){try{const res=await fetch('https://epsg.io/?format=json&q='+encodeURIComponent(q));const d=await res.json();const r=(d.results||[]).slice(0,10).map(x=>({code:x.code?'EPSG:'+x.code:x.authority+':'+x.code,name:x.name,area:x.area||''}));showR(r.length?r:POP.filter(p=>p.code.includes(q.toUpperCase())||p.name.toLowerCase().includes(q.toLowerCase())));}catch{showR(POP.filter(p=>p.code.includes(q.toUpperCase())||p.name.toLowerCase().includes(q.toLowerCase())));}}
+  function setAI(its){its.forEach((el,i)=>el.classList.toggle('active',i===ai));}
+  function pick(el){tgtCRS=el.dataset.code;tgtName=el.dataset.name;si.value=tgtCRS+' — '+tgtName;hint.textContent=tgtName;hint.style.display='block';closeR();canConvert();toast('Selected: '+tgtCRS);}
+  function closeR(){sr.classList.remove('open');ai=-1;}
+  function canConvert(){const btn=document.getElementById('conv-btn');btn.disabled=!(files.length&&tgtCRS);if(files.length&&tgtCRS)setStep(3);}
+  document.getElementById('detect-btn').addEventListener('click',async()=>{if(!files.length){toast('Upload files first.','err');return;}const btn=document.getElementById('detect-btn');btn.classList.add('loading');btn.disabled=true;try{const fd=new FormData();files.forEach(f=>fd.append('files',f));const res=await fetch(API+'/detect-crs',{method:'POST',body:fd});const d=await res.json();if(res.ok){srcCRS=d.crs||'Unknown';document.getElementById('crs-val').textContent=srcCRS;document.getElementById('crs-badge').classList.add('on');toast('Detected: '+srcCRS);}else toast(d.detail||'Detection failed.','err');}catch{srcCRS='EPSG:4326';document.getElementById('crs-val').textContent=srcCRS+' (demo)';document.getElementById('crs-badge').classList.add('on');toast('Demo mode — server not connected','err');}finally{btn.classList.remove('loading');btn.disabled=false;}});
+  document.getElementById('conv-btn').addEventListener('click',async()=>{if(!files.length||!tgtCRS){toast('Upload files & select a target CRS.','err');return;}const btn=document.getElementById('conv-btn'),pw=document.getElementById('prog'),pl=document.getElementById('prog-lbl'),dw=document.getElementById('dl-row');const fmt=document.getElementById('ofmt').value;const fmap={geojson:'reprojected.geojson',gpkg:'reprojected.gpkg',shapefile:'reprojected.zip'};fname=files.some(f=>/\.(tif|tiff)$/i.test(f.name))?'reprojected.tif':fmap[fmt];btn.classList.add('loading');btn.disabled=true;pw.classList.add('on');dw.classList.remove('on');pl.textContent='Reprojecting…';try{const fd=new FormData();files.forEach(f=>fd.append('files',f));fd.append('target_crs',tgtCRS);fd.append('output_format',fmt);const res=await fetch(API+'/convert',{method:'POST',body:fd});if(res.ok){blob=await res.blob();pw.classList.remove('on');dw.classList.add('on');toast('Conversion complete!');addHist(files.map(f=>f.name).join(', '),srcCRS||'—',tgtCRS,fmt);if(fmt==='geojson')mapPreview(blob);}else{const d=await res.json();toast(d.detail||'Conversion failed.','err');pw.classList.remove('on');}}catch{pl.textContent='Demo mode — server not connected.';setTimeout(()=>{pw.classList.remove('on');toast('Demo mode — connect the API server','err');},2200);}finally{btn.classList.remove('loading');btn.disabled=false;canConvert();}});
+  function mapPreview(gjBlob){const r=new FileReader();r.onload=e=>{try{const gj=JSON.parse(e.target.result);const mw=document.getElementById('map-wrap');mw.classList.add('on');if(!map){map=L.map('map',{zoomControl:true});L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(map);}if(layer){map.removeLayer(layer);}layer=L.geoJSON(gj,{style:{color:'#1a6b5a',weight:2,fillOpacity:.12}}).addTo(map);map.fitBounds(layer.getBounds(),{padding:[18,18]});}catch{}};r.readAsText(gjBlob);}
+  document.getElementById('dl-btn').addEventListener('click',()=>{if(!blob){toast('No file ready.','err');return;}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;a.click();toast('Downloading '+fname);});
+  document.getElementById('reset-btn').addEventListener('click',()=>{files=[];blob=null;fname='';srcCRS='';tgtCRS='';tgtName='';document.getElementById('flist').innerHTML='';document.getElementById('finput').value='';document.getElementById('crs-badge').classList.remove('on');document.getElementById('crs-val').textContent='—';document.getElementById('dl-row').classList.remove('on');document.getElementById('prog').classList.remove('on');document.getElementById('size-warn').style.display='none';document.getElementById('map-wrap').classList.remove('on');si.value='';hint.style.display='none';closeR();hideMeta();if(layer&&map){map.removeLayer(layer);layer=null;}setStep(1);canConvert();toast('Reset complete.');});
+  function addHist(fn,src,tgt,fmt){history.unshift({fn,src,tgt,fmt,t:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});renderHist();}
+  function renderHist(){const b=document.getElementById('hbody'),e=document.getElementById('empty-s');if(!history.length){b.innerHTML='';e.style.display='flex';return;}e.style.display='none';b.innerHTML=history.map(h=>'<tr><td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.7rem;font-family:var(--mono)">'+h.fn+'</td><td><span class="tcrs" style="opacity:.65">'+h.src+'</span></td><td><span class="tcrs">'+h.tgt+'</span></td><td><span class="tfmt">'+h.fmt+'</span></td><td><span class="tok"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Done</span></td><td style="color:var(--faint);font-size:.68rem;font-family:var(--mono)">'+h.t+'</td></tr>').join('');}
+  renderHist();setStep(1);
 })();
 </script>
 </body>
