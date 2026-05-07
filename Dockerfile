@@ -1,9 +1,12 @@
-FROM nginx:alpine
+FROM python:3.10-slim
 
-# Copy the static frontend
-COPY frontend/index.html /usr/share/nginx/html/index.html
+WORKDIR /app
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 80
+COPY frontend/app.py ./app.py
+
+EXPOSE 8501
+
+CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0", "--server.maxUploadSize=1024"]
