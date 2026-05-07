@@ -59,26 +59,32 @@ for key, val in [("detected_crs", None), ("history", []), ("target_crs_final", "
     if key not in st.session_state:
         st.session_state[key] = val
 
-# ── Palette ──────────────────────────────────────────────
-G   = "#2d6a4f"   # forest green — primary
-GD  = "#1e4d38"   # dark green hover
-GBG = "rgba(45,106,79,0.06)"
-GBR = "rgba(45,106,79,0.18)"
-BG  = "#f8f7f3"   # warm off-white
-S1  = "#ffffff"
-S2  = "#f2f0eb"
-S3  = "#e8e5de"
-BD  = "#dbd7cf"
-BD2 = "#c8c3b8"
-TX  = "#1a1812"
-MU  = "#5a5346"
-FA  = "#9e9789"
-MO  = "'JetBrains Mono', monospace"
+# ============================================================
+# AUROVILLE CONSULTING PALETTE
+# Deep forest green + warm gold + cream parchment
+# ============================================================
+G    = "#0b553d"          # Auroville deep green (primary)
+GD   = "#084430"          # darker green hover
+GBG  = "rgba(11,85,61,0.07)"
+GBR  = "rgba(11,85,61,0.18)"
+GOLD = "#bf9000"          # Auroville warm gold (accent)
+GOLD_BG = "rgba(191,144,0,0.08)"
+BG   = "#faf8f3"          # warm cream
+S1   = "#ffffff"
+S2   = "#f4f1ea"          # parchment surface
+S3   = "#ebe7de"          # deeper parchment
+BD   = "#dbd5c8"          # warm border
+BD2  = "#c9c2b3"
+TX   = "#1c1a14"          # near-black warm text
+MU   = "#4d4637"          # muted warm brown
+FA   = "#9a9080"          # faint warm gray
+MO   = "'JetBrains Mono', monospace"
 
 st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* ─ GLOBAL ──────────────────────────────────────── */
 html, body, [class*="css"] {{
     font-family: 'Inter', sans-serif !important;
     background: {BG} !important;
@@ -86,143 +92,147 @@ html, body, [class*="css"] {{
 }}
 #MainMenu, footer, header {{ visibility: hidden; }}
 .block-container {{
-    max-width: 720px !important;
-    padding: 2.5rem 1.5rem 3rem !important;
+    max-width: 740px !important;
+    padding: 2rem 1.5rem 3rem !important;
 }}
 
-/* ── NAV BAR ── */
+/* ─ NAV BAR ────────────────────────────────────── */
 .lila-nav {{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
     border-bottom: 1px solid {BD};
 }}
-.lila-brand {{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}}
-.lila-dot-mark {{
-    width: 28px; height: 28px;
+.lila-brand {{ display: flex; align-items: center; gap: 10px; }}
+.lila-mark {{
+    width: 30px; height: 30px;
     background: {G};
-    border-radius: 7px;
+    border-radius: 6px;
     display: flex; align-items: center; justify-content: center;
 }}
 .lila-brand-name {{
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem; font-weight: 600;
-    color: {TX}; letter-spacing: 0.01em;
+    font-size: 1.15rem; font-weight: 600;
+    color: {TX}; letter-spacing: 0.01em; line-height: 1;
 }}
 .lila-brand-sub {{
-    font-size: 0.58rem; color: {FA};
-    text-transform: uppercase; letter-spacing: 0.1em;
-    font-weight: 500;
+    font-size: 0.56rem; color: {FA};
+    text-transform: uppercase; letter-spacing: 0.12em; margin-top: 2px;
 }}
-.lila-nav-links {{
-    display: flex; gap: 20px;
-}}
+.lila-nav-links {{ display: flex; gap: 18px; }}
 .lila-nav-links a {{
-    font-size: 0.7rem; font-weight: 500;
-    color: {MU}; text-decoration: none;
-    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: 0.68rem; font-weight: 500; color: {MU};
+    text-decoration: none; text-transform: uppercase; letter-spacing: 0.08em;
+    transition: color 0.15s;
 }}
 .lila-nav-links a:hover {{ color: {G}; }}
 
-/* ── PAGE TITLE ── */
-.lila-title {{
-    margin-bottom: 2rem;
-}}
+/* ─ PAGE TITLE ──────────────────────────────────── */
+.lila-title {{ margin-bottom: 1.75rem; }}
 .lila-title h1 {{
     font-family: 'Cormorant Garamond', serif;
-    font-size: 2.4rem; font-weight: 500;
+    font-size: 2.5rem; font-weight: 500;
     line-height: 1.1; color: {TX};
-    letter-spacing: -0.01em; margin: 0 0 0.4rem;
+    letter-spacing: -0.01em; margin: 0 0 0.45rem;
 }}
-.lila-title h1 em {{
-    font-style: italic; color: {G};
-}}
+.lila-title h1 em {{ font-style: italic; color: {G}; }}
 .lila-title p {{
-    font-size: 0.85rem; color: {MU};
-    line-height: 1.7; margin: 0;
+    font-size: 0.84rem; color: {MU};
+    line-height: 1.75; margin: 0;
+    max-width: 54ch;
+}}
+.lila-gold-rule {{
+    width: 40px; height: 2px;
+    background: {GOLD};
+    margin: 0.75rem 0;
+    border-radius: 1px;
 }}
 
-/* ── SECTION LABEL ── */
-.lila-label {{
-    font-size: 0.55rem; font-weight: 700;
+/* ─ SECTION LABEL ──────────────────────────────── */
+.lila-section {{
+    display: flex; align-items: center; gap: 9px;
+    margin: 1.75rem 0 0.75rem;
+}}
+.lila-section-num {{
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.72rem; font-weight: 500;
+    color: {GOLD}; letter-spacing: 0.05em;
+}}
+.lila-section-name {{
+    font-size: 0.54rem; font-weight: 700;
     letter-spacing: 0.2em; text-transform: uppercase;
-    color: {FA}; margin: 1.8rem 0 0.7rem;
-    display: flex; align-items: center; gap: 8px;
+    color: {G};
 }}
-.lila-label::after {{
-    content: ''; flex: 1; height: 1px; background: {BD};
+.lila-section-line {{
+    flex: 1; height: 1px; background: {BD};
 }}
 
-/* ── UPLOAD INFO ── */
+/* ─ HINT BOX ───────────────────────────────────── */
 .lila-hint {{
     font-size: 0.76rem; color: {MU};
     background: {GBG}; border: 1px solid {GBR};
-    border-radius: 7px; padding: 8px 12px;
-    margin-bottom: 0.8rem; line-height: 1.65;
+    border-left: 3px solid {G};
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px; margin-bottom: 0.75rem; line-height: 1.65;
 }}
 
-/* ── FILE STATS ── */
-.lila-stats {{
-    display: flex; gap: 6px; margin: 0.6rem 0;
-}}
+/* ─ FILE STATS ────────────────────────────────── */
+.lila-stats {{ display: flex; gap: 6px; margin: 0.6rem 0; }}
 .lila-stat {{
     background: {S1}; border: 1px solid {BD};
-    border-radius: 8px; padding: 8px 14px;
-    flex: 1; text-align: center;
+    border-radius: 7px; padding: 9px 14px; flex: 1; text-align: center;
 }}
 .lila-stat-v {{
-    font-size: 1rem; font-weight: 600;
-    color: {TX}; font-family: {MO};
-    line-height: 1.2;
+    font-size: 1.05rem; font-weight: 600;
+    color: {TX}; font-family: {MO}; line-height: 1.2;
 }}
 .lila-stat-v.g {{ color: {G}; }}
 .lila-stat-l {{
-    font-size: 0.5rem; font-weight: 700;
+    font-size: 0.49rem; font-weight: 700;
     letter-spacing: 0.14em; text-transform: uppercase;
-    color: {FA}; margin-top: 2px;
+    color: {FA}; margin-top: 3px;
 }}
 
-/* ── CRS DETECTED ── */
+/* ─ CRS DETECTED ─────────────────────────────── */
 .lila-detected {{
-    display: flex; align-items: center; gap: 10px;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
     background: {GBG}; border: 1px solid {GBR};
-    border-radius: 8px; padding: 10px 14px;
-    margin: 0.6rem 0; font-size: 0.8rem; color: {MU};
+    border-radius: 7px; padding: 9px 13px;
+    margin: 0.55rem 0; font-size: 0.79rem; color: {MU};
 }}
 .lila-detected code {{
-    font-family: {MO}; font-size: 0.82rem;
+    font-family: {MO}; font-size: 0.81rem;
     font-weight: 600; color: {G};
 }}
-
-/* ── EPSG NOTE ── */
-.lila-epsg-note {{
-    font-size: 0.69rem; color: {G};
-    background: {GBG}; border: 1px solid {GBR};
-    border-radius: 5px; padding: 4px 9px;
-    font-family: {MO}; margin-top: 4px;
-    display: inline-block;
+.lila-detected .sep {{
+    color: {BD2}; font-size: 0.7rem;
 }}
 
-/* ── RESULT CARD ── */
+/* ─ EPSG NOTE ─────────────────────────────────── */
+.lila-epsg-note {{
+    font-size: 0.68rem; color: {G};
+    background: {GBG}; border: 1px solid {GBR};
+    border-radius: 5px; padding: 4px 9px;
+    font-family: {MO}; margin-top: 4px; display: inline-block;
+}}
+
+/* ─ RESULT CARD ───────────────────────────────── */
 .lila-result {{
     display: grid; grid-template-columns: 1fr 32px 1fr;
     border: 1px solid {BD}; border-radius: 10px;
-    overflow: hidden; margin: 0.8rem 0;
+    overflow: hidden; margin: 0.75rem 0;
+    box-shadow: 0 2px 10px rgba(11,85,61,0.06);
 }}
-.lila-rs {{ padding: 14px 18px; background: {S1}; }}
+.lila-rs {{ padding: 15px 18px; background: {S1}; }}
 .lila-rs.b {{ background: {S2}; }}
 .lila-rarrow {{
     display: flex; align-items: center; justify-content: center;
-    background: {S3}; color: {G}; font-size: 0.9rem; font-weight: 700;
+    background: {S3}; color: {GOLD}; font-size: 0.95rem; font-weight: 700;
 }}
 .lila-rs-label {{
-    font-size: 0.49rem; font-weight: 700;
+    font-size: 0.48rem; font-weight: 700;
     letter-spacing: 0.16em; text-transform: uppercase;
     color: {FA}; margin-bottom: 4px;
 }}
@@ -230,9 +240,9 @@ html, body, [class*="css"] {{
     font-family: {MO}; font-size: 0.88rem;
     font-weight: 600; color: {G}; margin-bottom: 2px;
 }}
-.lila-rs-name {{ font-size: 0.71rem; color: {MU}; }}
+.lila-rs-name {{ font-size: 0.71rem; color: {MU}; line-height: 1.4; }}
 
-/* ── HISTORY ── */
+/* ─ HISTORY TABLE ──────────────────────────────── */
 .lila-history {{
     border: 1px solid {BD}; border-radius: 10px;
     overflow: hidden; margin-top: 0.5rem;
@@ -244,106 +254,92 @@ html, body, [class*="css"] {{
 }}
 .lila-hrow:last-child {{ border-bottom: none; }}
 .lila-hh {{
-    font-size: 0.49rem; font-weight: 700;
+    font-size: 0.48rem; font-weight: 700;
     letter-spacing: 0.14em; text-transform: uppercase;
     color: {FA}; padding: 8px 10px; background: {S3};
 }}
 .lila-hd {{ padding: 9px 10px; color: {TX}; background: {S1}; }}
 .lila-badge {{
-    display: inline-block;
-    font-family: {MO}; font-size: 0.62rem; font-weight: 600;
-    background: {GBG}; color: {G}; border-radius: 4px; padding: 1px 6px;
+    display: inline-block; font-family: {MO};
+    font-size: 0.62rem; font-weight: 600;
+    background: {GBG}; color: {G};
+    border-radius: 4px; padding: 1px 6px;
 }}
 .lila-badge.n {{
     background: {S3}; color: {MU};
-    font-family: 'Inter', sans-serif;
-    font-size: 0.58rem; text-transform: uppercase;
-    letter-spacing: 0.06em; border: 1px solid {BD2};
+    font-family: 'Inter', sans-serif; font-size: 0.57rem;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    border: 1px solid {BD2};
 }}
 .lila-ok {{ font-size: 0.65rem; color: {G}; font-weight: 600; }}
 
-/* ── FOOTER ── */
+/* ─ FOOTER ───────────────────────────────────────── */
 .lila-footer {{
-    margin-top: 3rem;
-    padding-top: 1rem;
+    margin-top: 3rem; padding-top: 1rem;
     border-top: 1px solid {BD};
     display: flex; justify-content: space-between;
     align-items: center; flex-wrap: wrap; gap: 6px;
 }}
-.lila-footer span {{ font-size: 0.64rem; color: {FA}; }}
+.lila-footer span {{ font-size: 0.63rem; color: {FA}; }}
 .lila-footer-links {{ display: flex; gap: 14px; }}
 .lila-footer-links a {{
-    font-size: 0.58rem; font-weight: 600;
+    font-size: 0.57rem; font-weight: 600;
     letter-spacing: 0.09em; text-transform: uppercase;
     color: {FA}; text-decoration: none;
 }}
 .lila-footer-links a:hover {{ color: {G}; }}
 
-/* ── STREAMLIT OVERRIDES ── */
+/* ─ STREAMLIT WIDGET OVERRIDES ─────────────────── */
 div[data-testid="stButton"] button {{
-    background: {G} !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 7px !important;
-    font-weight: 600 !important;
-    font-size: 0.81rem !important;
-    padding: 0.45rem 1.1rem !important;
+    background: {G} !important; color: #fff !important;
+    border: none !important; border-radius: 7px !important;
+    font-weight: 600 !important; font-size: 0.81rem !important;
+    padding: 0.44rem 1.1rem !important;
     transition: background 0.15s !important;
 }}
-div[data-testid="stButton"] button:hover {{
-    background: {GD} !important;
-}}
+div[data-testid="stButton"] button:hover {{ background: {GD} !important; }}
 div[data-testid="stButton"] button:disabled {{
-    background: {S3} !important;
-    color: {FA} !important;
+    background: {S3} !important; color: {FA} !important;
 }}
 div[data-testid="stDownloadButton"] > button {{
-    background: {G} !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-size: 0.85rem !important;
-    font-weight: 600 !important;
-    padding: 0.55rem 1.3rem !important;
-    width: 100% !important;
+    background: {G} !important; color: #fff !important;
+    border: none !important; border-radius: 8px !important;
+    font-size: 0.85rem !important; font-weight: 600 !important;
+    padding: 0.55rem 1.3rem !important; width: 100% !important;
     transition: background 0.15s !important;
 }}
-div[data-testid="stDownloadButton"] > button:hover {{
-    background: {GD} !important;
-}}
+div[data-testid="stDownloadButton"] > button:hover {{ background: {GD} !important; }}
 div[data-testid="stSelectbox"] label,
 div[data-testid="stTextInput"] label,
 div[data-testid="stFileUploader"] label {{
-    font-size: 0.53rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.16em !important;
-    text-transform: uppercase !important;
+    font-size: 0.52rem !important; font-weight: 700 !important;
+    letter-spacing: 0.16em !important; text-transform: uppercase !important;
     color: {FA} !important;
 }}
 div[data-testid="stFileUploader"] > div {{
     border: 1.5px dashed {BD2} !important;
-    border-radius: 10px !important;
-    background: {S2} !important;
+    border-radius: 10px !important; background: {S2} !important;
     transition: border-color 0.18s !important;
 }}
-div[data-testid="stFileUploader"] > div:hover {{
-    border-color: {G} !important;
-}}
+div[data-testid="stFileUploader"] > div:hover {{ border-color: {G} !important; }}
 div[data-testid="stSelectbox"] > div > div,
 div[data-testid="stTextInput"] > div > div > input {{
-    border-color: {BD2} !important;
-    border-radius: 7px !important;
+    border-color: {BD2} !important; border-radius: 7px !important;
     background: {S1} !important;
 }}
+/* Force light background on all Streamlit containers */
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+.main .block-container {{ background: {BG} !important; }}
 </style>
 """, unsafe_allow_html=True)
 
-# ── NAV ──────────────────────────────────────────────────
+# ── NAV ─────────────────────────────────────────────────
 st.markdown(f"""
 <div class="lila-nav">
   <div class="lila-brand">
-    <div class="lila-dot-mark">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+    <div class="lila-mark">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
            stroke="white" stroke-width="2.2"
            stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
@@ -367,15 +363,23 @@ st.markdown(f"""
 st.markdown(f"""
 <div class="lila-title">
   <h1>Reproject <em>Spatial Data</em><br>with Precision</h1>
+  <div class="lila-gold-rule"></div>
   <p>Convert GeoTIFF, GeoJSON, or Shapefiles to any EPSG coordinate system — fast and reliable.</p>
 </div>
 """, unsafe_allow_html=True)
 
 # ── STEP 1: UPLOAD ───────────────────────────────────────
-st.markdown('<div class="lila-label">01 — Upload Files</div>', unsafe_allow_html=True)
+st.markdown(f"""
+<div class="lila-section">
+  <span class="lila-section-num">01</span>
+  <span class="lila-section-name">Upload Files</span>
+  <span class="lila-section-line"></span>
+</div>
+""", unsafe_allow_html=True)
+
 st.markdown(f"""
 <div class="lila-hint">
-  For Shapefiles upload all parts together:
+  For Shapefiles, upload all parts together:
   <code>.shp</code> &middot; <code>.shx</code> &middot; <code>.dbf</code> &middot; <code>.prj</code>
 </div>
 """, unsafe_allow_html=True)
@@ -389,7 +393,7 @@ files = st.file_uploader(
 
 if files:
     total_mb = sum(f.size for f in files) / 1024 / 1024
-    exts = ", ".join(sorted({f.name.rsplit(".",1)[-1].upper() for f in files}))
+    exts = ", ".join(sorted({f.name.rsplit(".", 1)[-1].upper() for f in files}))
     st.markdown(f"""
     <div class="lila-stats">
       <div class="lila-stat">
@@ -410,7 +414,13 @@ if files:
         st.warning(f"⚠️ {total_mb:.1f} MB — large files may take several minutes.")
 
 # ── STEP 2: DETECT & CONFIGURE ───────────────────────────
-st.markdown('<div class="lila-label">02 — Detect &amp; Configure CRS</div>', unsafe_allow_html=True)
+st.markdown(f"""
+<div class="lila-section">
+  <span class="lila-section-num">02</span>
+  <span class="lila-section-name">Detect &amp; Configure CRS</span>
+  <span class="lila-section-line"></span>
+</div>
+""", unsafe_allow_html=True)
 
 if files:
     c1, c2 = st.columns([1, 3])
@@ -434,7 +444,8 @@ if files:
         <div class="lila-detected">
           <span>Source CRS</span>
           <code>{st.session_state.detected_crs}</code>
-          <span style="color:{FA};">{name}</span>
+          <span class="sep">—</span>
+          <span>{name}</span>
         </div>
         """, unsafe_allow_html=True)
 
@@ -451,12 +462,13 @@ if files:
             target_crs = preset.split()[0]
 
         if target_crs in EPSG_NAMES:
-            st.markdown(f'<div class="lila-epsg-note">✔ {EPSG_NAMES[target_crs]}</div>',
-                        unsafe_allow_html=True)
+            st.markdown(
+                f'<div class="lila-epsg-note">✔ {EPSG_NAMES[target_crs]}</div>',
+                unsafe_allow_html=True)
         elif target_crs.startswith("EPSG:"):
             code = target_crs.replace("EPSG:", "")
             st.markdown(
-                f'<div style="font-size:0.68rem;color:{FA};margin-top:3px;">'
+                f'<div style="font-size:0.67rem;color:{FA};margin-top:3px;">'
                 f'Verify at <a href="https://epsg.io/{code}" target="_blank" '
                 f'style="color:{G};">epsg.io/{code}</a></div>',
                 unsafe_allow_html=True)
@@ -474,7 +486,13 @@ else:
     target_crs, out_fmt = "", "geojson"
 
 # ── STEP 3: CONVERT ──────────────────────────────────────
-st.markdown('<div class="lila-label">03 — Convert &amp; Download</div>', unsafe_allow_html=True)
+st.markdown(f"""
+<div class="lila-section">
+  <span class="lila-section-num">03</span>
+  <span class="lila-section-name">Convert &amp; Download</span>
+  <span class="lila-section-line"></span>
+</div>
+""", unsafe_allow_html=True)
 
 if not files:
     st.caption("Complete Step 1 to enable conversion.")
@@ -502,12 +520,12 @@ else:
                            "gpkg":    "reprojected.gpkg",
                            "shapefile": "reprojected.zip"}
                 out_name = ("reprojected.tif"
-                            if any(f.name.lower().endswith((".tif",".tiff")) for f in files)
+                            if any(f.name.lower().endswith((".tif", ".tiff")) for f in files)
                             else ext_map[out_fmt])
 
-                src  = st.session_state.detected_crs or "—"
-                sn   = EPSG_NAMES.get(src, "Original")
-                tn   = EPSG_NAMES.get(target_crs, "Reprojected")
+                src = st.session_state.detected_crs or "—"
+                sn  = EPSG_NAMES.get(src, "Original")
+                tn  = EPSG_NAMES.get(target_crs, "Reprojected")
                 st.markdown(f"""
                 <div class="lila-result">
                   <div class="lila-rs">
@@ -537,11 +555,18 @@ else:
 
 # ── HISTORY ──────────────────────────────────────────────
 if st.session_state.history:
-    st.markdown('<div class="lila-label">Session History</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="lila-section" style="margin-top:1.75rem;">
+      <span class="lila-section-num" style="color:{FA};">&#x21BA;</span>
+      <span class="lila-section-name">Session History</span>
+      <span class="lila-section-line"></span>
+    </div>
+    """, unsafe_allow_html=True)
     rows = "".join(f"""
     <div class="lila-hrow">
-      <div class="lila-hd" style="font-family:'JetBrains Mono',monospace;font-size:0.66rem;
-           overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{h['files']}</div>
+      <div class="lila-hd" style="font-family:'JetBrains Mono',monospace;
+           font-size:0.65rem;overflow:hidden;text-overflow:ellipsis;
+           white-space:nowrap;">{h['files']}</div>
       <div class="lila-hd"><span class="lila-badge" style="opacity:.55">{h['source']}</span></div>
       <div class="lila-hd"><span class="lila-badge">{h['target']}</span></div>
       <div class="lila-hd"><span class="lila-badge n">{h['format']}</span></div>
