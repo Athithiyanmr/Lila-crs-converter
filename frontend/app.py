@@ -275,7 +275,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     display: block; font-size: 0.86rem; margin-bottom: 1px;
 }}
 
-/* Stat grid — ALL numbers white, no orange */
+/* Stat grid — ALL numbers orange */
 .lila-left-stats {{
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px; margin-bottom: 2rem;
@@ -288,7 +288,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 .lila-left-stat-v {{
     font-family: 'Cabinet Grotesk', sans-serif !important;
     font-size: 1.35rem; font-weight: 800;
-    color: rgba(232,236,255,0.95) !important;
+    color: {ACC} !important;
     letter-spacing: -0.02em; display: block;
 }}
 .lila-left-stat-l {{
@@ -472,7 +472,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 </style>
 """, unsafe_allow_html=True)
 
-# ── TOP NAV ─────────────────────────────────────────────────
+# ── TOP NAV ──────────────────────────────────────────────────
 st.markdown(f"""
 <div class="lila-topbar">
   <div class="lila-brand">
@@ -497,7 +497,7 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# ── LAYOUT ─────────────────────────────────────────────────
+# ── LAYOUT ────────────────────────────────────────────────────
 left_col, right_col = st.columns([1, 2.4], gap="small")
 
 with left_col:
