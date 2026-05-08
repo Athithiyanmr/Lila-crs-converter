@@ -79,8 +79,7 @@ DARK_S1  = "#111838"
 DARK_S2  = "#18204A"
 DARK_P   = "#39C6D6"
 MO   = "'JetBrains Mono', 'Consolas', monospace"
-# v2: no orange anywhere — stat numbers white, file types blue, all accents blue
-STAT_W = "rgba(232,236,255,0.95)"
+STAT_W = "#ffffff"
 
 st.markdown(f"""
 <style>
@@ -98,6 +97,19 @@ html, body {{ background: {BG} !important; color: {TX} !important; }}
 [data-testid="stMarkdownContainer"] span,
 [data-testid="stText"], .stText, span, p, div {{
     color: {TX} !important;
+}}
+
+/* ── STAT NUMBERS: white override — highest specificity ── */
+.lila-left-stat .lila-left-stat-v,
+.lila-left-stat span.lila-left-stat-v,
+div.lila-left-stat span.lila-left-stat-v,
+div.lila-left-stats div.lila-left-stat span.lila-left-stat-v {{
+    color: {STAT_W} !important;
+    font-family: 'Cabinet Grotesk', sans-serif !important;
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    display: block !important;
 }}
 
 [data-testid="stSelectbox"] label,[data-testid="stSelectbox"] label span,
@@ -185,7 +197,6 @@ div[data-testid="stButton"] button:hover {{
 }}
 div[data-testid="stButton"] button span {{ color: #ffffff !important; }}
 
-/* Download button — blue, white text, no orange */
 div[data-testid="stDownloadButton"] > button {{
     background: {P} !important; color: #ffffff !important;
     border: none !important; border-radius: 8px !important;
@@ -279,7 +290,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: #ffffff !important; 
     display: block; font-size: 0.86rem; margin-bottom: 1px;
 }}
 
-/* Stat grid — numbers WHITE, labels dim, no orange */
+/* Stat grid */
 .lila-left-stats {{
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px; margin-bottom: 2rem;
@@ -291,8 +302,8 @@ div[data-testid="stDownloadButton"] > button span {{ color: #ffffff !important; 
 }}
 .lila-left-stat-v {{
     font-family: 'Cabinet Grotesk', sans-serif !important;
-    font-size: 1.35rem; font-weight: 800;
-    color: rgba(232,236,255,0.95) !important;
+    font-size: 1.35rem !important; font-weight: 800 !important;
+    color: #ffffff !important;
     letter-spacing: -0.02em; display: block;
 }}
 .lila-left-stat-l {{
@@ -350,7 +361,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: #ffffff !important; 
     font-size: 1.1rem; font-weight: 800;
     color: {TX} !important; letter-spacing: -0.01em; line-height: 1.2;
 }}
-/* All colored stat values use blue — no orange */
 .lila-stat-v.p   {{ color: {P} !important; }}
 .lila-stat-v.acc {{ color: {P} !important; }}
 .lila-stat-l {{
@@ -517,19 +527,19 @@ with left_col:
 
       <div class="lila-left-stats">
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v">25+</span>
+          <span class="lila-left-stat-v" style="color:#ffffff !important;">25+</span>
           <div class="lila-left-stat-l">EPSG Presets</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v">3</span>
+          <span class="lila-left-stat-v" style="color:#ffffff !important;">3</span>
           <div class="lila-left-stat-l">Output Formats</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v">Auto</span>
+          <span class="lila-left-stat-v" style="color:#ffffff !important;">Auto</span>
           <div class="lila-left-stat-l">CRS Detection</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v">&#x221e;</span>
+          <span class="lila-left-stat-v" style="color:#ffffff !important;">&#x221e;</span>
           <div class="lila-left-stat-l">File Size</div>
         </div>
       </div>
