@@ -74,12 +74,13 @@ PH   = "#145a8f"
 PL   = "#e0f0ff"
 PLR  = "rgba(27,108,168,0.18)"
 PBG  = "rgba(27,108,168,0.07)"
-ACC  = "#FFB000"
 DARK_BG  = "#0B1026"
 DARK_S1  = "#111838"
 DARK_S2  = "#18204A"
 DARK_P   = "#39C6D6"
 MO   = "'JetBrains Mono', 'Consolas', monospace"
+# Stat white — used for left panel stat numbers
+STAT_W = "rgba(232,236,255,0.95)"
 
 st.markdown(f"""
 <style>
@@ -184,19 +185,21 @@ div[data-testid="stButton"] button:hover {{
 }}
 div[data-testid="stButton"] button span {{ color: #ffffff !important; }}
 
+/* Download button — consistent blue, white text */
 div[data-testid="stDownloadButton"] > button {{
-    background: {ACC} !important; color: {DARK_BG} !important;
+    background: {P} !important; color: #ffffff !important;
     border: none !important; border-radius: 8px !important;
     font-family: 'General Sans', sans-serif !important;
     font-size: 0.92rem !important; font-weight: 700 !important;
     padding: 0.62rem 1.6rem !important; width: 100% !important;
-    box-shadow: 0 2px 8px rgba(255,176,0,0.28) !important;
+    box-shadow: 0 2px 8px rgba(27,108,168,0.28) !important;
     transition: opacity 0.15s, transform 0.18s !important;
 }}
 div[data-testid="stDownloadButton"] > button:hover {{
-    opacity: 0.88 !important; transform: translateY(-2px) !important;
+    background: {PH} !important; transform: translateY(-2px) !important;
+    box-shadow: 0 4px 16px rgba(27,108,168,0.38) !important;
 }}
-div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important; }}
+div[data-testid="stDownloadButton"] > button span {{ color: #ffffff !important; }}
 
 /* TOP NAV */
 .lila-topbar {{
@@ -252,8 +255,9 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 }}
 .lila-left-logo em {{ font-style: normal; color: {DARK_P} !important; }}
 .lila-accent-bar {{
-    width: 28px; height: 2.5px; background: {ACC};
+    width: 28px; height: 2.5px; background: {P};
     border-radius: 2px; margin: 0.9rem 0 1.1rem;
+    opacity: 0.6;
 }}
 .lila-left-desc {{
     font-family: 'General Sans', sans-serif !important;
@@ -264,7 +268,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 .lila-feat {{ display: flex; align-items: flex-start; gap: 10px; }}
 .lila-feat-dot {{
     width: 6px; height: 6px; border-radius: 50%;
-    background: {ACC}; margin-top: 7px; flex-shrink: 0;
+    background: rgba(232,236,255,0.5); margin-top: 7px; flex-shrink: 0;
 }}
 .lila-feat-text {{
     font-family: 'General Sans', sans-serif !important;
@@ -275,7 +279,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     display: block; font-size: 0.86rem; margin-bottom: 1px;
 }}
 
-/* Stat grid — ALL numbers orange */
+/* Stat grid — numbers white, labels dim */
 .lila-left-stats {{
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px; margin-bottom: 2rem;
@@ -288,7 +292,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 .lila-left-stat-v {{
     font-family: 'Cabinet Grotesk', sans-serif !important;
     font-size: 1.35rem; font-weight: 800;
-    color: {ACC} !important;
+    color: rgba(232,236,255,0.95) !important;
     letter-spacing: -0.02em; display: block;
 }}
 .lila-left-stat-l {{
@@ -346,8 +350,9 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     font-size: 1.1rem; font-weight: 800;
     color: {TX} !important; letter-spacing: -0.01em; line-height: 1.2;
 }}
+/* Both .p and .acc are the same blue for consistency */
 .lila-stat-v.p {{ color: {P} !important; }}
-.lila-stat-v.acc {{ color: {ACC} !important; }}
+.lila-stat-v.acc {{ color: {P} !important; }}
 .lila-stat-l {{
     font-family: {MO}; font-size: 0.6rem; font-weight: 500;
     letter-spacing: 0.12em; text-transform: uppercase;
@@ -400,7 +405,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 .lila-rarrow {{
     display: flex; align-items: center; justify-content: center;
     background: linear-gradient(135deg, {DARK_BG}, {DARK_S2});
-    color: {ACC} !important; font-size: 1.1rem; font-weight: 700;
+    color: #ffffff !important; font-size: 1.1rem; font-weight: 700;
     font-family: {MO};
 }}
 .lila-rs-label {{
@@ -604,7 +609,7 @@ with right_col:
             <div class="lila-stat-l">Total Size</div>
           </div>
           <div class="lila-stat">
-            <div class="lila-stat-v acc">{exts}</div>
+            <div class="lila-stat-v p">{exts}</div>
             <div class="lila-stat-l">File Types</div>
           </div>
         </div>
