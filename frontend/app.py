@@ -59,68 +59,47 @@ for k, v in [("detected_crs", None), ("history", []), ("target_crs_final", "")]:
     if k not in st.session_state:
         st.session_state[k] = v
 
-# ── Portfolio Design System — NASA "Midnight Orbit" ────────────────
-# Exact tokens from athithiyanmr.github.io/Athithiyanmr/
-
-# Light mode surfaces
+# ── Design tokens ──────────────────────────────────────────
 BG   = "#f2f4ff"
 S1   = "#ffffff"
 S2   = "#e8ecf8"
 S3   = "#dde3f0"
 BD   = "#c5cde0"
 BD2  = "#b0b9d1"
-
-# Text
 TX   = "#0B1026"
 MU   = "#4a5578"
 FA   = "#8090b0"
-
-# Primary accent — deep blue (light mode)
 P    = "#1B6CA8"
 PH   = "#145a8f"
 PL   = "#e0f0ff"
 PLR  = "rgba(27,108,168,0.18)"
 PBG  = "rgba(27,108,168,0.07)"
-
-# Accent — amber gold
 ACC  = "#FFB000"
-ACCL = "#fff5dd"
-
-# Dark mode palette (for left panel gradient)
 DARK_BG  = "#0B1026"
 DARK_S1  = "#111838"
 DARK_S2  = "#18204A"
 DARK_P   = "#39C6D6"
-
 MO   = "'JetBrains Mono', 'Consolas', monospace"
 
 st.markdown(f"""
 <style>
-/* ── FONT IMPORTS — exact match with portfolio ── */
 @import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&f[]=cabinet-grotesk@500,700,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ── GLOBAL RESET ── */
 html, body {{ background: {BG} !important; color: {TX} !important; }}
 [class*="css"] {{ font-family: 'General Sans', 'Helvetica Neue', sans-serif !important; }}
 #MainMenu, footer, header {{ visibility: hidden; }}
-[data-testid="stAppViewContainer"],
-[data-testid="stMain"],
-.main {{ background: {BG} !important; }}
+[data-testid="stAppViewContainer"],[data-testid="stMain"],.main {{ background: {BG} !important; }}
 .block-container {{ max-width: 100% !important; padding: 0 !important; margin: 0 !important; }}
 
-/* ── FORCE ALL TEXT DARK ── */
 .stMarkdown, .stMarkdown p, .stMarkdown span,
-[data-testid="stMarkdownContainer"],
-[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"],[data-testid="stMarkdownContainer"] p,
 [data-testid="stMarkdownContainer"] span,
 [data-testid="stText"], .stText, span, p, div {{
     color: {TX} !important;
 }}
 
-/* ── SELECTBOX ── */
-[data-testid="stSelectbox"] label,
-[data-testid="stSelectbox"] label span,
+[data-testid="stSelectbox"] label,[data-testid="stSelectbox"] label span,
 [data-testid="stSelectbox"] label p {{
     font-family: 'General Sans', sans-serif !important;
     font-size: 0.68rem !important; font-weight: 700 !important;
@@ -135,18 +114,14 @@ html, body {{ background: {BG} !important; color: {TX} !important; }}
     border-color: {BD2} !important; border-radius: 8px !important;
     font-size: 0.88rem !important; font-family: 'General Sans', sans-serif !important;
 }}
-[data-baseweb="popover"] ul li,
-[data-baseweb="menu"] li,
-[data-baseweb="menu"] li span,
-[data-baseweb="menu"] li div {{
+[data-baseweb="popover"] ul li,[data-baseweb="menu"] li,
+[data-baseweb="menu"] li span,[data-baseweb="menu"] li div {{
     color: {TX} !important; background: {S1} !important;
     font-size: 0.86rem !important; font-family: 'General Sans', sans-serif !important;
 }}
 [data-baseweb="menu"] li:hover {{ background: {PBG} !important; }}
 
-/* ── TEXT INPUT ── */
-[data-testid="stTextInput"] label,
-[data-testid="stTextInput"] label span,
+[data-testid="stTextInput"] label,[data-testid="stTextInput"] label span,
 [data-testid="stTextInput"] label p {{
     font-family: 'General Sans', sans-serif !important;
     font-size: 0.68rem !important; font-weight: 700 !important;
@@ -160,9 +135,7 @@ html, body {{ background: {BG} !important; color: {TX} !important; }}
 }}
 [data-testid="stTextInput"] input::placeholder {{ color: {FA} !important; opacity: 1 !important; }}
 
-/* ── FILE UPLOADER ── */
-[data-testid="stFileUploader"] label,
-[data-testid="stFileUploader"] label span,
+[data-testid="stFileUploader"] label,[data-testid="stFileUploader"] label span,
 [data-testid="stFileUploader"] label p {{
     font-family: 'General Sans', sans-serif !important;
     font-size: 0.68rem !important; font-weight: 700 !important;
@@ -177,45 +150,25 @@ html, body {{ background: {BG} !important; color: {TX} !important; }}
 [data-testid="stFileUploader"] section:hover {{
     border-color: {P} !important; background: {PBG} !important;
 }}
-[data-testid="stFileUploader"] section span,
-[data-testid="stFileUploader"] section p,
-[data-testid="stFileUploader"] section div,
-[data-testid="stFileUploaderDropzone"] span,
-[data-testid="stFileUploaderDropzone"] p {{
-    color: {MU} !important; font-size: 0.86rem !important;
-}}
-[data-testid="stFileUploaderFile"] span,
-[data-testid="stFileUploaderFile"] p,
-[data-testid="stFileUploaderFile"] div,
-[data-testid="stFileUploaderFileName"],
-[data-testid="stFileUploaderFileData"] {{
-    color: {TX} !important; font-size: 0.84rem !important;
-}}
+[data-testid="stFileUploader"] section span,[data-testid="stFileUploader"] section p,
+[data-testid="stFileUploader"] section div,[data-testid="stFileUploaderDropzone"] span,
+[data-testid="stFileUploaderDropzone"] p {{ color: {MU} !important; font-size: 0.86rem !important; }}
+[data-testid="stFileUploaderFile"] span,[data-testid="stFileUploaderFile"] p,
+[data-testid="stFileUploaderFile"] div,[data-testid="stFileUploaderFileName"],
+[data-testid="stFileUploaderFileData"] {{ color: {TX} !important; font-size: 0.84rem !important; }}
 
-/* ── ALERTS ── */
-[data-testid="stAlert"] p,
-[data-testid="stAlert"] span,
+[data-testid="stAlert"] p,[data-testid="stAlert"] span,
 .stAlert p, .stSuccess p, .stError p, .stWarning p, .stInfo p {{
     color: {TX} !important; font-size: 0.86rem !important;
 }}
-
-/* ── SPINNER ── */
-[data-testid="stSpinner"] span,
-[data-testid="stSpinner"] p {{ color: {MU} !important; }}
-
-/* ── CAPTION ── */
-.stCaption, [data-testid="stCaptionContainer"],
-[data-testid="stCaptionContainer"] p {{
+[data-testid="stSpinner"] span,[data-testid="stSpinner"] p {{ color: {MU} !important; }}
+.stCaption,[data-testid="stCaptionContainer"],[data-testid="stCaptionContainer"] p {{
     font-size: 0.78rem !important; color: {FA} !important;
 }}
-
-/* ── RIGHT PANEL p/li ── */
-.lila-right p, .lila-right li,
-.lila-right .stMarkdown p {{
+.lila-right p, .lila-right li, .lila-right .stMarkdown p {{
     font-size: 0.88rem !important; line-height: 1.75 !important; color: {MU} !important;
 }}
 
-/* ── BUTTONS — portfolio primary button style ── */
 div[data-testid="stButton"] button {{
     background: {P} !important; color: #ffffff !important;
     border: none !important; border-radius: 8px !important;
@@ -245,7 +198,7 @@ div[data-testid="stDownloadButton"] > button:hover {{
 }}
 div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important; }}
 
-/* ── TOP NAV — portfolio nav style ── */
+/* TOP NAV */
 .lila-topbar {{
     position: sticky; top: 0; z-index: 100;
     background: rgba(242,244,255,0.92);
@@ -285,11 +238,10 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 .lila-nav-links a:hover {{ color: {P} !important; }}
 .lila-nav-links a:hover::after {{ width: 100%; }}
 
-/* ── LEFT PANEL — dark like portfolio stats-strip ── */
+/* LEFT PANEL */
 .lila-left {{
     background: linear-gradient(135deg, {DARK_BG} 0%, {DARK_S2} 55%, #1B6CA8 100%);
-    padding: 2.8rem 2rem;
-    display: flex; flex-direction: column;
+    padding: 2.8rem 2rem; display: flex; flex-direction: column;
     min-height: calc(100vh - 62px);
 }}
 .lila-left-logo {{
@@ -298,10 +250,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     color: rgba(232,236,255,0.95) !important; line-height: 1.1;
     letter-spacing: -0.03em; margin-bottom: 0.5rem;
 }}
-.lila-left-logo em {{
-    font-style: normal;
-    color: {DARK_P} !important;
-}}
+.lila-left-logo em {{ font-style: normal; color: {DARK_P} !important; }}
 .lila-accent-bar {{
     width: 28px; height: 2.5px; background: {ACC};
     border-radius: 2px; margin: 0.9rem 0 1.1rem;
@@ -326,7 +275,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     display: block; font-size: 0.86rem; margin-bottom: 1px;
 }}
 
-/* Stats inside left panel — like portfolio stat-item */
+/* Stat grid — ALL numbers white, no orange */
 .lila-left-stats {{
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px; margin-bottom: 2rem;
@@ -342,7 +291,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     color: rgba(232,236,255,0.95) !important;
     letter-spacing: -0.02em; display: block;
 }}
-.lila-left-stat-v.accent {{ color: {ACC} !important; }}
 .lila-left-stat-l {{
     font-family: {MO}; font-size: 0.58rem;
     color: rgba(232,236,255,0.45) !important;
@@ -353,10 +301,8 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     color: rgba(232,236,255,0.28) !important; line-height: 1.7;
 }}
 
-/* ── RIGHT PANEL ── */
+/* RIGHT PANEL */
 .lila-right {{ background: {BG}; padding: 2.4rem 3rem; overflow-y: auto; }}
-
-/* Section headers — mono label like portfolio .section-label */
 .lila-section {{
     display: flex; align-items: center; gap: 12px; margin: 1.8rem 0 0.9rem;
 }}
@@ -375,13 +321,11 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 }}
 .lila-section-line {{ flex: 1; height: 1px; background: {BD}; }}
 
-/* Hint box — portfolio-style highlight card border */
 .lila-hint {{
     font-family: 'General Sans', sans-serif !important;
     font-size: 0.84rem; color: {MU} !important;
     background: {PBG}; border: 1px solid {PLR};
-    border-left: 3px solid {P};
-    border-radius: 0 8px 8px 0;
+    border-left: 3px solid {P}; border-radius: 0 8px 8px 0;
     padding: 11px 15px; margin-bottom: 1rem; line-height: 1.72;
 }}
 .lila-hint code {{
@@ -391,7 +335,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 }}
 .lila-hint strong {{ color: {TX} !important; }}
 
-/* File stats — like portfolio .timeline-period chips */
 .lila-stats {{ display: flex; gap: 8px; margin: 0.8rem 0; }}
 .lila-stat {{
     background: {S1}; border: 1px solid {BD};
@@ -411,7 +354,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     color: {FA} !important; margin-top: 4px;
 }}
 
-/* Detected CRS — portfolio .hero-tag style */
 .lila-detected {{
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
     background: {PBG}; border: 1px solid {PLR};
@@ -440,7 +382,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     font-size: 0.83rem; color: {MU} !important; font-weight: 500;
 }}
 
-/* EPSG note */
 .lila-epsg-note {{
     font-family: {MO}; font-size: 0.76rem; color: {P} !important;
     background: {PBG}; border: 1px solid {PLR};
@@ -448,7 +389,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     margin-top: 6px; display: inline-block;
 }}
 
-/* Result card — portfolio project-card style */
 .lila-result {{
     display: grid; grid-template-columns: 1fr 44px 1fr;
     border: 1px solid {BD}; border-radius: 12px;
@@ -477,7 +417,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
     font-size: 0.8rem; color: {MU} !important; line-height: 1.45;
 }}
 
-/* History table — portfolio deliverable-tag style */
 .lila-history {{
     border: 1px solid {BD}; border-radius: 10px;
     overflow: hidden; margin-top: 0.6rem;
@@ -513,7 +452,6 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 }}
 .lila-ok {{ font-family: {MO}; font-size: 0.78rem; color: {P} !important; font-weight: 700; }}
 
-/* Footer */
 .lila-footer {{
     margin-top: 3rem; padding-top: 1.2rem;
     border-top: 1px solid {BD};
@@ -534,7 +472,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: {DARK_BG} !important
 </style>
 """, unsafe_allow_html=True)
 
-# ── TOP NAV BAR ─────────────────────────────────────────────────
+# ── TOP NAV ─────────────────────────────────────────────────
 st.markdown(f"""
 <div class="lila-topbar">
   <div class="lila-brand">
@@ -555,13 +493,11 @@ st.markdown(f"""
   <div class="lila-nav-links">
     <a href="https://epsg.io" target="_blank">EPSG.io</a>
     <a href="https://proj.org" target="_blank">PROJ Docs</a>
-    <a href="https://github.com/Athithiyanmr/Lila-crs-converter" target="_blank">GitHub</a>
-    <a href="https://athithiyanmr.github.io/Athithiyanmr/" target="_blank">Portfolio</a>
   </div>
 </div>
 """, unsafe_allow_html=True)
 
-# ── TWO-COLUMN LAYOUT ─────────────────────────────────────────────
+# ── LAYOUT ─────────────────────────────────────────────────
 left_col, right_col = st.columns([1, 2.4], gap="small")
 
 with left_col:
@@ -580,7 +516,7 @@ with left_col:
           <div class="lila-left-stat-l">EPSG Presets</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v accent">3</span>
+          <span class="lila-left-stat-v">3</span>
           <div class="lila-left-stat-l">Output Formats</div>
         </div>
         <div class="lila-left-stat">
@@ -588,7 +524,7 @@ with left_col:
           <div class="lila-left-stat-l">CRS Detection</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v accent">∞</span>
+          <span class="lila-left-stat-v">∞</span>
           <div class="lila-left-stat-l">File Size</div>
         </div>
       </div>
@@ -633,7 +569,7 @@ with left_col:
 with right_col:
     st.markdown('<div class="lila-right">', unsafe_allow_html=True)
 
-    # ─ 01 UPLOAD ───────────────────────────────────────
+    # 01 UPLOAD
     st.markdown(f"""
     <div class="lila-section">
       <span class="lila-section-num">01</span>
@@ -676,7 +612,7 @@ with right_col:
         if total_mb > 200:
             st.warning(f"⚠️ {total_mb:.1f} MB — large files may take several minutes.")
 
-    # ─ 02 DETECT & CONFIGURE ───────────────────────────
+    # 02 DETECT & CONFIGURE
     st.markdown(f"""
     <div class="lila-section">
       <span class="lila-section-num">02</span>
@@ -751,7 +687,7 @@ with right_col:
         st.caption("Upload files in Step 1 to continue.")
         target_crs, out_fmt = "", "geojson"
 
-    # ─ 03 CONVERT ──────────────────────────────────────
+    # 03 CONVERT
     st.markdown(f"""
     <div class="lila-section">
       <span class="lila-section-num">03</span>
@@ -821,7 +757,7 @@ with right_col:
             except Exception as e:
                 st.error(f"Server error: {e}")
 
-    # ─ SESSION HISTORY ────────────────────────────────────
+    # SESSION HISTORY
     if st.session_state.history:
         st.markdown(f"""
         <div class="lila-section" style="margin-top:2.5rem;">
@@ -852,14 +788,13 @@ with right_col:
         </div>
         """, unsafe_allow_html=True)
 
-    # ─ FOOTER ──────────────────────────────────────────────
+    # FOOTER
     st.markdown(f"""
     <div class="lila-footer">
       <span>Lila Geospatial · Athithiyan MR · Powered by PROJ &amp; GDAL</span>
       <div class="lila-footer-links">
         <a href="https://epsg.io" target="_blank">EPSG.io</a>
         <a href="https://proj.org" target="_blank">PROJ</a>
-        <a href="https://github.com/Athithiyanmr/Lila-crs-converter" target="_blank">GitHub</a>
       </div>
     </div>
     </div>
