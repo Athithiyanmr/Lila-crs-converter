@@ -79,7 +79,7 @@ DARK_S1  = "#111838"
 DARK_S2  = "#18204A"
 DARK_P   = "#39C6D6"
 MO   = "'JetBrains Mono', 'Consolas', monospace"
-# Stat white — used for left panel stat numbers
+# v2: no orange anywhere — stat numbers white, file types blue, all accents blue
 STAT_W = "rgba(232,236,255,0.95)"
 
 st.markdown(f"""
@@ -185,7 +185,7 @@ div[data-testid="stButton"] button:hover {{
 }}
 div[data-testid="stButton"] button span {{ color: #ffffff !important; }}
 
-/* Download button — consistent blue, white text */
+/* Download button — blue, white text, no orange */
 div[data-testid="stDownloadButton"] > button {{
     background: {P} !important; color: #ffffff !important;
     border: none !important; border-radius: 8px !important;
@@ -279,7 +279,7 @@ div[data-testid="stDownloadButton"] > button span {{ color: #ffffff !important; 
     display: block; font-size: 0.86rem; margin-bottom: 1px;
 }}
 
-/* Stat grid — numbers white, labels dim */
+/* Stat grid — numbers WHITE, labels dim, no orange */
 .lila-left-stats {{
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 10px; margin-bottom: 2rem;
@@ -350,8 +350,8 @@ div[data-testid="stDownloadButton"] > button span {{ color: #ffffff !important; 
     font-size: 1.1rem; font-weight: 800;
     color: {TX} !important; letter-spacing: -0.01em; line-height: 1.2;
 }}
-/* Both .p and .acc are the same blue for consistency */
-.lila-stat-v.p {{ color: {P} !important; }}
+/* All colored stat values use blue — no orange */
+.lila-stat-v.p   {{ color: {P} !important; }}
 .lila-stat-v.acc {{ color: {P} !important; }}
 .lila-stat-l {{
     font-family: {MO}; font-size: 0.6rem; font-weight: 500;
@@ -529,7 +529,7 @@ with left_col:
           <div class="lila-left-stat-l">CRS Detection</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v">∞</span>
+          <span class="lila-left-stat-v">&#x221e;</span>
           <div class="lila-left-stat-l">File Size</div>
         </div>
       </div>
