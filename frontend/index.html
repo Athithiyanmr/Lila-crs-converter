@@ -127,6 +127,7 @@
     .alert svg{flex-shrink:0;margin-top:2px;}
     .a-info{background:var(--primary-hl);color:var(--primary);border-color:var(--primary-hl2);}
     .a-warn{background:var(--warn-bg);color:var(--warn);border-color:var(--warn-b);}
+    .a-error{background:rgba(160,40,40,.07);color:var(--error);border-color:rgba(160,40,40,.2);}
     .dropzone{position:relative;border:1.5px dashed var(--border);border-radius:var(--rmd);padding:34px 20px;text-align:center;cursor:pointer;background:var(--surface-2);transition:border-color var(--t) var(--ease),background var(--t) var(--ease);}
     .dropzone:hover,.dropzone.over{border-color:var(--primary);background:var(--primary-hl);}
     .dropzone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
@@ -267,7 +268,7 @@
       <div class="card-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
       Upload Spatial Files
     </div>
-    <p class="card-desc">Accepts GeoTIFF, GeoJSON and Shapefiles. For Shapefiles, upload all parts together.</p>
+    <p class="card-desc">Accepts GeoTIFF, GeoJSON and Shapefiles. For Shapefiles, upload all parts together. Maximum total size: <strong>1 GB</strong>.</p>
     <div class="alert a-info">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span>Shapefiles need all four parts: <strong>.shp &nbsp;.shx &nbsp;.dbf &nbsp;.prj</strong></span>
@@ -392,6 +393,7 @@
 <div class="tc" id="tc" aria-live="assertive" role="status"></div>
 <script>
 (function(){
+  const MAX_SIZE_BYTES = 1 * 1024 * 1024 * 1024; // 1 GB
   const html=document.documentElement,ttoggle=document.querySelector('[data-theme-toggle]');
   let theme=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
   html.setAttribute('data-theme',theme);syncIcon();
@@ -409,10 +411,20 @@
   dz.addEventListener('drop',ev=>add(ev.dataTransfer.files));
   fi.addEventListener('change',()=>add(fi.files));
   dz.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fi.click();}});
-  function add(inc){files=[...files,...Array.from(inc)];render();sizeCheck();canConvert();setStep(files.length?2:1);getInfo();}
+  function add(inc){
+    const incoming=Array.from(inc);
+    const combined=[...files,...incoming];
+    const totalSize=combined.reduce((s,f)=>s+f.size,0);
+    if(totalSize>MAX_SIZE_BYTES){
+      const gb=(totalSize/MAX_SIZE_BYTES).toFixed(2);
+      toast('Total file size ('+gb+' GB) exceeds the 1 GB limit. Please upload smaller files.','err');
+      return;
+    }
+    files=combined;render();sizeCheck();canConvert();setStep(files.length?2:1);getInfo();
+  }
   function render(){fl.innerHTML='';files.forEach((f,i)=>{const d=document.createElement('div');d.className='fitem';d.style.animationDelay=(i*35)+'ms';d.innerHTML='<span class="fext">'+ext(f.name)+'</span><span class="fname">'+f.name+'</span><span class="fsize">'+sz(f.size)+'</span>'+'<button class="frem" data-i="'+i+'" aria-label="Remove '+f.name+'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';fl.appendChild(d);});fl.querySelectorAll('.frem').forEach(b=>b.addEventListener('click',()=>{files.splice(+b.dataset.i,1);render();sizeCheck();canConvert();if(!files.length){hideMeta();setStep(1);}}));}
   function sizeCheck(){const w=document.getElementById('size-warn'),t=document.getElementById('size-warn-txt');if(!files.length){w.style.display='none';return;}const mb=files.reduce((s,f)=>s+f.size,0)/1048576;if(mb>100){w.style.display='flex';t.textContent=mb.toFixed(1)+' MB total — conversion may take a few minutes.';}else w.style.display='none';}
-  async function getInfo(){try{const fd=new FormData();files.forEach(f=>fd.append('files',f));const res=await fetch(API+'/file-info',{method:'POST',body:fd});if(!res.ok)return;const d=await res.json();const items=[{l:'CRS',v:d.crs||'—',c:'crs'},{l:'Type',v:d.type||'—'},{l:'Features',v:d.feature_count!=null?d.feature_count.toLocaleString():'—'},{l:'Bands',v:d.band_count!=null?d.band_count:'—'},{l:'Width',v:d.width?d.width+'px':'—'},{l:'Height',v:d.height?d.height+'px':'—'}].filter(x=>x.v!=='—');if(!items.length)return;const g=document.getElementById('mgrid');g.innerHTML=items.map(x=>'<div class="mcard"><div class="mcard-lbl">'+x.l+'</div><div class="mcard-val '+(x.c||'')+'">'+ x.v+'</div></div>').join('');document.getElementById('mcard-wrap').style.display='block';}catch{}}
+  async function getInfo(){try{const fd=new FormData();files.forEach(f=>fd.append('files',f));const res=await fetch(API+'/file-info',{method:'POST',body:fd});if(!res.ok)return;const d=await res.json();const items=[{l:'CRS',v:d.crs||'—',c:'crs'},{l:'Type',v:d.type||'—'},{l:'Features',v:d.feature_count!=null?d.feature_count.toLocaleString():'—'},{l:'Bands',v:d.band_count!=null?d.band_count:'—'},{l:'Width',v:d.width?d.width+'px':'—'},{l:'Height',v:d.height?d.height+'px':'—'}].filter(x=>x.v!=='—');if(!items.length)return;const g=document.getElementById('mgrid');g.innerHTML=items.map(x=>'<div class="mcard"><div class="mcard-lbl">'+x.l+'</div><div class="mcard-val '+(x.c||'')+'">'+x.v+'</div></div>').join('');document.getElementById('mcard-wrap').style.display='block';}catch{}}
   function hideMeta(){document.getElementById('mcard-wrap').style.display='none';}
   const si=document.getElementById('crs-search'),sr=document.getElementById('sr-box'),hint=document.getElementById('crs-hint');
   let stimer=null,ai=-1;
