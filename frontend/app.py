@@ -539,7 +539,7 @@ with left_col:
           <div class="lila-left-stat-l">CRS Detection</div>
         </div>
         <div class="lila-left-stat">
-          <span class="lila-left-stat-v" style="color:#ffffff !important;">&#x221e;</span>
+          <span class="lila-left-stat-v" style="color:#ffffff !important;">&lt;1 GB</span>
           <div class="lila-left-stat-l">File Size</div>
         </div>
       </div>
@@ -557,13 +557,6 @@ with left_col:
           <div class="lila-feat-text">
             <strong>Multiple Formats</strong>
             GeoJSON, GeoPackage, Shapefile output
-          </div>
-        </div>
-        <div class="lila-feat">
-          <div class="lila-feat-dot"></div>
-          <div class="lila-feat-text">
-            <strong>India-Ready EPSG</strong>
-            Includes Kalianpur, UTM zones &amp; NSF LCC
           </div>
         </div>
         <div class="lila-feat">
